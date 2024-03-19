@@ -4,322 +4,322 @@ using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using CsvHelper;
 using CsvHelper.Configuration.Attributes;
+using System.Text;
 
 namespace DataLibrary;
 
-[Serializable]
+[Serializable, CultureInfo("ru-RU")]
 public class IceHillData
-{
-    private readonly long _globalId;
+{   
+    private long _globalId;
 
-    [JsonPropertyName("global_id"), Name("global_id")]
+    [JsonPropertyName("global_id"), Name("global_id"), Index(0)]
     public long GlobalId
     {
         get =>  _globalId;
-        init => _globalId = value;
+        set => _globalId = value;
     }
 
-    private readonly string? _objectName;
+    private string? _objectName;
     [JsonPropertyName("ObjectName"), Name("ObjectName")]
     public string ObjectName
     {
         get => _objectName!;
-        init {_objectName = CheckStringFieldValue(value);}
+        set {_objectName = CheckStringFieldValue(value);}
     }
 
-    private readonly string? _nameWinter;
+    private string? _nameWinter;
     [JsonPropertyName("NameWinter"), Name("NameWinter")]
     public string NameWinter
     {
         get => _nameWinter!;
-        init {_nameWinter = CheckStringFieldValue(value);}
+        set {_nameWinter = CheckStringFieldValue(value);}
     }
 
-    private readonly string? _photoWinter;
+    private string? _photoWinter;
     [JsonPropertyName("PhotoWinter"), Name("PhotoWinter")]
     public string PhotoWinter
     {
         get => _photoWinter!;
-        init {_photoWinter = CheckStringFieldValue(value);}
+        set {_photoWinter = CheckStringFieldValue(value);}
     }
 
-    private readonly string? _admArea;
+    private string? _admArea;
     [JsonPropertyName("AdmArea"), Name("AdmArea")]
     public string AdmArea
     {
         get => _admArea!;
-        init {_admArea = CheckStringFieldValue(value);}
+        set {_admArea = CheckStringFieldValue(value);}
     }
 
-    private readonly string? _district;
+    private string? _district;
     [JsonPropertyName("District"), Name("District")]
     public string District
     {
         get => _district!;
-        init {_district = CheckStringFieldValue(value);}
+        set {_district = CheckStringFieldValue(value);}
     }
 
-    private readonly string? _address;
+    private string? _address;
     [JsonPropertyName("Address"), Name("Address")]
     public string Address
     {
         get => _address!;
-        init {_address = CheckStringFieldValue(value);}
+        set {_address = CheckStringFieldValue(value);}
     }
 
-    private readonly string? _email;
+    private string? _email;
     [JsonPropertyName("Email"), Name("Email")]
     public string Email
     {
         get => _email!;
-        init {_email = CheckStringFieldValue(value);}
+        set {_email = CheckStringFieldValue(value);}
     }
 
-    private readonly string? _webSite;
+    private string? _webSite;
     [JsonPropertyName("WebSite"), Name("WebSite")]
     public string WebSite
     {
         get => _webSite!;
-        init {_webSite = CheckStringFieldValue(value);}
+        set {_webSite = CheckStringFieldValue(value);}
     }
 
-    private readonly string? _helpPhone;
+    private string? _helpPhone;
     [JsonPropertyName("HelpPhone"), Name("HelpPhone")]
     public string HelpPhone
     {
         get => _helpPhone!;
-        init {_helpPhone = CheckStringFieldValue(value);}
+        set {_helpPhone = CheckStringFieldValue(value);}
     }
 
-    private readonly string? _helpPhoneExtension;
+    private string? _helpPhoneExtension;
     [JsonPropertyName("HelpPhoneExtension"), Name("HelpPhoneExtension")]
-    public string HelpPhoneExstencion
+    public string HelpPhoneExtension
     {
         get => _helpPhoneExtension!;
-        init {_helpPhoneExtension = CheckStringFieldValue(value);}
+        set {_helpPhoneExtension = CheckStringFieldValue(value);}
     }
 
-    private readonly string? _workingHoursWinter;
+    private string? _workingHoursWinter;
     [JsonPropertyName("WorkingHoursWinter"), Name("WorkingHoursWinter")]
     public string WorkingHoursWinter
     {
         get => _workingHoursWinter!;
-        init {_workingHoursWinter = CheckStringFieldValue(value);}
+        set {_workingHoursWinter = CheckStringFieldValue(value);}
     }
 
-    private readonly string? _clarificationOfWorkingHoursWinter;
+    private string? _clarificationOfWorkingHoursWinter;
     [JsonPropertyName("ClarificationOfWorkingHoursWinter"), Name("ClarificationOfWorkingHoursWinter")]
     public string ClarificationOfWorkingHoursWinter
     {
         get => _clarificationOfWorkingHoursWinter!;
-        init {_clarificationOfWorkingHoursWinter = CheckStringFieldValue(value);}
+        set {_clarificationOfWorkingHoursWinter = CheckStringFieldValue(value);}
     }
 
-    private readonly string? _hasEquipmentRental;
+    private string? _hasEquipmentRental;
     [JsonPropertyName("HasEquipmentRental"), Name("HasEquipmentRental")]
     public string HasEquipmentRental
     {
         get => _hasEquipmentRental!;
-        init {_hasEquipmentRental = CheckStringFieldValue(value);}
+        set {_hasEquipmentRental = CheckStringFieldValue(value);}
     }
 
-    private readonly string? _equipmentRentalComments;
+    private string? _equipmentRentalComments;
     [JsonPropertyName("EquipmentRentalComments"), Name("EquipmentRentalComments")]
     public string EquipmentRentalComments
     {
         get => _equipmentRentalComments!;
-        init {_equipmentRentalComments= CheckStringFieldValue(value);}
+        set {_equipmentRentalComments= CheckStringFieldValue(value);}
     }
 
-    private readonly string? _hasTechService;
+    private string? _hasTechService;
     [JsonPropertyName("HasTechService"), Name("HasTechService")]
     public string HasTechService
     {
         get => _hasTechService!;
-        init {_hasTechService= CheckStringFieldValue(value);}
+        set {_hasTechService= CheckStringFieldValue(value);}
     }
 
-    private readonly string? _techServiceComments;
+    private string? _techServiceComments;
     [JsonPropertyName("TechServiceComments"), Name("TechServiceComments")]
     public string TechServiceComments
     {
         get => _techServiceComments!;
-        init {_techServiceComments= CheckStringFieldValue(value);}
+        set {_techServiceComments= CheckStringFieldValue(value);}
     }
 
-    private readonly string? _hasDressingRoom;
+    private string? _hasDressingRoom;
     [JsonPropertyName("HasDressingRoom"), Name("HasDressingRoom")]
     public string HasDressingRoom
     {
         get => _hasDressingRoom!;
-        init {_hasDressingRoom= CheckStringFieldValue(value);}
+        set {_hasDressingRoom= CheckStringFieldValue(value);}
     }
 
-    private readonly string? _hasEatery;
+    private string? _hasEatery;
     [JsonPropertyName("HasEatery"), Name("HasEatery")]
     public string HasEatery
     {
         get => _hasEatery!;
-        init {_hasEatery= CheckStringFieldValue(value);}
+        set {_hasEatery= CheckStringFieldValue(value);}
     }
 
-    private readonly string? _hasToilet;
+    private string? _hasToilet;
     [JsonPropertyName("HasToilet"), Name("HasToilet")]
     public string HasToilet
     {
         get => _hasToilet!;
-        init {_hasToilet= CheckStringFieldValue(value);}
+        set {_hasToilet= CheckStringFieldValue(value);}
     }
 
-    private readonly string? _hasWifi;
+    private string? _hasWifi;
     [JsonPropertyName("HasWifi"), Name("HasWifi")]
     public string HasWifi
     {
         get => _hasWifi!;
-        init {_hasWifi= CheckStringFieldValue(value);}
+        set {_hasWifi= CheckStringFieldValue(value);}
     }
 
-    private readonly string? _hasCashMachine;
+    private string? _hasCashMachine;
     [JsonPropertyName("HasCashMachine"), Name("HasCashMachine")]
     public string HasCashMachine
     {
         get => _hasCashMachine!;
-        init {_hasCashMachine= CheckStringFieldValue(value);}
+        set {_hasCashMachine= CheckStringFieldValue(value);}
     }
 
-    private readonly string? _hasFirstAidPost;
+    private string? _hasFirstAidPost;
     [JsonPropertyName("HasFirstAidPost"), Name("HasFirstAidPost")]
     public string HasFirstAidPost
     {
         get => _hasFirstAidPost!;
-        init {_hasFirstAidPost= CheckStringFieldValue(value);}
+        set {_hasFirstAidPost= CheckStringFieldValue(value);}
     }
 
-    private readonly string? _hasMusic;
+    private string? _hasMusic;
     [JsonPropertyName("HasMusic"), Name("HasMusic")]
     public string HasMusic
     {
         get => _hasMusic!;
-        init {_hasMusic= CheckStringFieldValue(value);}
+        set {_hasMusic= CheckStringFieldValue(value);}
     }
 
-    private readonly string? _usagePeriodWinter;
+    private string? _usagePeriodWinter;
     [JsonPropertyName("UsagePeriodWinter"), Name("UsagePeriodWinter")]
     public string UsagePeriodWinter
     {
         get => _usagePeriodWinter!;
-        init {_usagePeriodWinter= CheckStringFieldValue(value);}
+        set {_usagePeriodWinter= CheckStringFieldValue(value);}
     }
 
-    private readonly string? _dimensionsWinter;
+    private string? _dimensionsWinter;
     [JsonPropertyName("DimensionsWinter"), Name("DimensionsWinter")]
     public string DimensionsWinter
     {
         get => _dimensionsWinter!;
-        init {_dimensionsWinter= CheckStringFieldValue(value);}
+        set {_dimensionsWinter= CheckStringFieldValue(value);}
     }
 
-    private readonly string? _lighting;
+    private string? _lighting;
     [JsonPropertyName("Lighting"), Name("Lighting")]
     public string Lighting
     {
         get => _lighting!;
-        init {_lighting= CheckStringFieldValue(value);}
+        set {_lighting= CheckStringFieldValue(value);}
     }
 
-    private readonly string? _surfaceTypeWinter;
+    private string? _surfaceTypeWinter;
     [JsonPropertyName("SurfaceTypeWinter"), Name("SurfaceTypeWinter")]
     public string SurfaceTypeWinter
     {
         get => _surfaceTypeWinter!;
-        init {_surfaceTypeWinter= CheckStringFieldValue(value);}
+        set {_surfaceTypeWinter= CheckStringFieldValue(value);}
     }
 
-    private readonly int _seats;
+    private int _seats;
     [JsonPropertyName("Seats"), Name("Seats")]
     public int Seats
     {
         get => _seats;
-        init => _seats = value;
+        set => _seats = value;
     }
 
-    private readonly string? _piad;
+    private string? _piad;
     [JsonPropertyName("Paid"), Name("Paid")]
     public string Paid
     {
         get => _piad!;
-        init {_piad = CheckStringFieldValue(value);}
+        set {_piad = CheckStringFieldValue(value);}
     }
 
-    private readonly string? _paidComments;
+    private string? _paidComments;
     [JsonPropertyName("PaidComments"), Name("PaidComments")]
     public string PaidComments
     {
         get => _paidComments!;
-        init {_paidComments = CheckStringFieldValue(value);}
+        set {_paidComments = CheckStringFieldValue(value);}
     }
 
-    private readonly string? _disabilityFriendly;
+    private string? _disabilityFriendly;
     [JsonPropertyName("DisabilityFriendly"), Name("DisabilityFriendly")]
     public string DisabilityFriendly
     {
         get => _disabilityFriendly!;
-        init {_disabilityFriendly = CheckStringFieldValue(value);}
+        set {_disabilityFriendly = CheckStringFieldValue(value);}
     }
 
-    private readonly string? _servicesWinter;
+    private string? _servicesWinter;
     [JsonPropertyName("ServicesWinter"), Name("ServicesWinter")]
     public string ServicesWinter
     {
         get => _servicesWinter!;
-        init {_servicesWinter= CheckStringFieldValue(value);}
+        set {_servicesWinter= CheckStringFieldValue(value);}
     }
 
-    private readonly string? _geoData;
+    private string? _geoData;
     [JsonPropertyName("geoData"), Name("geoData")]
     public string GeoData
     {
         get => _geoData!;
-        init {_geoData= CheckStringFieldValue(value);}
+        set {_geoData= CheckStringFieldValue(value);}
     }
 
-    private readonly string? _geoDataCenter;
+    private string? _geoDataCenter;
     [JsonPropertyName("geodata_center"), Name("geodata_center")]
     public string GeoDataCenter
     {
         get => _geoDataCenter!;
-        init {_geoDataCenter= CheckStringFieldValue(value);}
+        set {_geoDataCenter= CheckStringFieldValue(value);}
     }
 
-    private readonly string? _geoArea;
+    private string? _geoArea;
     [JsonPropertyName("geoarea"), Name("geoarea")]
     public string GeoArea
     {
         get => _geoArea!;
-        init {_geoArea= CheckStringFieldValue(value);}
+        set {_geoArea= CheckStringFieldValue(value);}
     }
 
-    [Index(36), Name(""), Ignore]
-    public string Plug {get; init;} = "";
+    public IceHillData() {}
 
     [JsonConstructor]
-    public IceHillData(long globalId = 0, string objectName = "", string nameWinter = "", string photoWinter = "", string admArea = "", string district = "", string address = "", string email = "", string webSite = "",
-    string helpPhone = "", string helpPhoneExtension = "", string workingHoursWinter = "", string clarificationOfWorkingHoursWinter = "", string hasEquipmentRental = "", string equipmentRentalComments = "", string hasTechService = "",
-    string techServiceComments = "", string hasDressingRoom = "", string hasEatery = "", string hasToilet = "", string hasWifi = "", string hasCashMachine = "", string hasFirstAidPost = "", string hasMusic = "",
-    string usagePeriodWinter = "", string dimensionsWinter = "", string lighting = "", string surfaceTypeWinter = "", int seats = 0, string paid = "", string paidComments = "", string disabilityFriendly = "", string servicesWinter = "",
-    string geoData = "", string geoDataCenter = "", string geoArea = "")
+    public IceHillData(long globalid, string objectname, string namewinter, string photowinter, string admarea, string district, string address, string email, string website,
+    string helpphone, string helpPhoneExtension, string workingHoursWinter, string clarificationOfWorkingHoursWinter, string hasEquipmentRental, string equipmentRentalComments, string hasTechService,
+    string techServiceComments, string hasDressingRoom, string hasEatery, string hasToilet, string hasWifi, string hasCashMachine, string hasFirstAidPost, string hasMusic,
+    string usagePeriodWinter, string dimensionsWinter, string lighting, string surfaceTypeWinter, int seats, string paid, string paidComments, string disabilityFriendly, string servicesWinter,
+    string geoData, string geoDataCenter, string geoArea)
     {
-        GlobalId = globalId;
-        ObjectName = objectName;
-        NameWinter = nameWinter;
-        PhotoWinter = photoWinter;
-        AdmArea = admArea;
+        GlobalId = globalid;
+        ObjectName = objectname;
+        NameWinter = namewinter;
+        PhotoWinter = photowinter;
+        AdmArea = admarea;
         District = district;
         Address = address;
         Email = email;
-        WebSite = webSite;
-        HelpPhone = helpPhone;
-        HelpPhoneExstencion = helpPhoneExtension;
+        WebSite = website;
+        HelpPhone = helpphone;
+        HelpPhoneExtension = helpPhoneExtension;
         WorkingHoursWinter = workingHoursWinter;
         ClarificationOfWorkingHoursWinter = clarificationOfWorkingHoursWinter;
         HasEquipmentRental = hasEquipmentRental;
@@ -375,5 +375,4 @@ public class IceHillData
         if (value == null) {return "";}
         else {return value;}
     }
-
 }

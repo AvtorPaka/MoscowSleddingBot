@@ -15,6 +15,7 @@ public class CSVProcessing
     {
         Delimiter = ";",
         Encoding = Encoding.UTF8,
+        MissingFieldFound = null,
     };
 
     public CSVProcessing(string? path = null)
@@ -30,8 +31,9 @@ public class CSVProcessing
             return Stream.Null;
         }
         try
-        {
-            using StreamWriter sWriter = new StreamWriter(PathToWriteData);
+        {   
+            Stream fs = File.Open(PathToWriteData, FileMode.Create, FileAccess.ReadWrite);
+            using StreamWriter sWriter = new StreamWriter(fs);
             using CsvWriter csvWriter = new CsvWriter(sWriter, configuration);
 
             csvWriter.WriteHeader<IceHillData>();
@@ -47,8 +49,9 @@ public class CSVProcessing
             isWriteCorrect = true;
             return streamOut;
         }
-        catch (Exception)
-        {
+        catch (Exception ex)
+        {   
+            Console.WriteLine($"{ex.Message}\nError occured while handling CSV Write.");
             isWriteCorrect = false;
             return Stream.Null;
         }
@@ -82,7 +85,7 @@ public class CSVProcessing
         }
         catch (Exception ex)
         {   
-            Console.WriteLine($"{ex.Message}\nПроизошла хуйня с CSV.");
+            Console.WriteLine($"{ex.Message}\nError occured while handling CSV Read.");
             IsConvertCorrect = false;
             return new List<IceHillData>();
         }

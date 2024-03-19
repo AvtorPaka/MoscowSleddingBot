@@ -4,8 +4,11 @@ using MoscowSleddingBot.Interfaces;
 
 var builder = Host.CreateDefaultBuilder(args);
 
-builder.ConfigureAppConfiguration(configBuilder =>
-    configBuilder.AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true));
+builder.ConfigureAppConfiguration((context, config) =>
+{
+    IHostEnvironment envir = context.HostingEnvironment;
+    config.AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true);
+});
 
 // Logging configuration.
 // builder.ConfigureLogging(loggingBuilder =>
@@ -15,15 +18,16 @@ builder.ConfigureAppConfiguration(configBuilder =>
 // });
 
 builder.ConfigureServices((context, services) =>
-{
-    // string token = context.Configuration["MoscowSleddingBotToken"] ?? throw new Exception("Bot token wasnt found.");
-    string token = Environment.GetEnvironmentVariable("MoscowSleddingBotToken") ?? throw new Exception("Bot token wasnt found.");
+{   
+    // string token = Environment.GetEnvironmentVariable("MoscowSleddingBotToken")!;
+    string token = context.Configuration["MoscowSleddingBotToken"] ?? throw new Exception("Bot token wasnt found.");
+    services.AddHttpClient("TelegramBotClient").AddTypedClient<ITelegramBotClient>(_ =>
+    {
+        return new TelegramBotClient(new TelegramBotClientOptions(token));
+    });
 
-    services.AddHttpClient("TelegramBotClient")
-        .AddTypedClient<ITelegramBotClient>(_ => new TelegramBotClient(new TelegramBotClientOptions(token)));
-
-    services.AddTransient<IMessageService, MessageService>();
     services.AddTransient<ICallbackQueryService, CallbackQueryService>();
+    services.AddTransient<IMessageService, MessageService>();
     services.AddScoped<UpdateHandler>();
     services.AddScoped<ReceiverService>();
     services.AddHostedService<PollingService>();
