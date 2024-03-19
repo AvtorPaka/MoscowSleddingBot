@@ -19,32 +19,34 @@ public class MessageService : IMessageService
 
     public async Task BotOnMessageReceived(Message message, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Receive message type: {MessageType}", message.Type);
+        _logger.LogInformation("Received message type: {MessageType}", message.Type);
 
         Task handelrMessage = message.Type switch
         {
             MessageType.Text => BotOnMessageTextHandler(_telegramBotClient, message, cancellationToken),
-            // MessageType.Document => BotOnMessageDocumentHandler(telegramBotClient, message, cancellationToken),
-            _ => BotActions.SendUnknowMessageTextResponse(_telegramBotClient, message, cancellationToken)
+            MessageType.Document => BotOnMessageDocumentHandler(_telegramBotClient, message, cancellationToken),
+            _ => BotActions.SendUnknowMessageTextActionAsync(_telegramBotClient, message, cancellationToken)
         };
 
         await handelrMessage;
+    }
+    private async Task BotOnMessageDocumentHandler(ITelegramBotClient telegramBotClient, Message message, CancellationToken cancellationToken)
+    {
+        Message sentMessage = await BotActions.LoadFileFromUserAction(telegramBotClient, message, cancellationToken);
 
-        static async Task BotOnMessageTextHandler(ITelegramBotClient telegramBotClient, Message message, CancellationToken cancellationToken)
+        _logger.LogInformation("The message was sent with id {SentMessageId} on {DateTime}", sentMessage.MessageId, DateTime.Now);
+    }
+
+    private async Task BotOnMessageTextHandler(ITelegramBotClient telegramBotClient, Message message, CancellationToken cancellationToken)
+    {
+        Task<Message> action = message.Text switch
         {
-            Task<Message> action = message.Text switch
-            {
-                "/start" => BotActions.SendStartText(telegramBotClient, message, cancellationToken),
-                _ => BotActions.SendUnknowMessageTextResponse(telegramBotClient, message, cancellationToken)
-            };
+            "/start" => BotActions.SendStartText(telegramBotClient, message, cancellationToken),
+            _ => BotActions.SendUnknowMessageTextActionAsync(telegramBotClient, message, cancellationToken)
+        };
 
-            Message sentMessage = await action;
-        }
+        Message sentMessage = await action;
 
-        //Регистрация документа работает
-        // static async Task BotOnMessageDocumentHandler(ITelegramBotClient telegramBotClient, Message message, CancellationToken cancellationToken)
-        // {
-
-        // }
+        _logger.LogInformation("The message was sent with id {SentMessageId} on {DateTime}", sentMessage.MessageId, DateTime.Now);
     }
 }

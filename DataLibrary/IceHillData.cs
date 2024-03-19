@@ -2,6 +2,8 @@
 using System.Text.Json.Serialization;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
+using CsvHelper;
+using CsvHelper.Configuration.Attributes;
 
 namespace DataLibrary;
 
@@ -10,7 +12,7 @@ public class IceHillData
 {
     private readonly long _globalId;
 
-    [JsonPropertyName("global_id")]
+    [JsonPropertyName("global_id"), Name("global_id")]
     public long GlobalId
     {
         get =>  _globalId;
@@ -18,6 +20,7 @@ public class IceHillData
     }
 
     private readonly string? _objectName;
+    [JsonPropertyName("ObjectName"), Name("ObjectName")]
     public string ObjectName
     {
         get => _objectName!;
@@ -25,6 +28,7 @@ public class IceHillData
     }
 
     private readonly string? _nameWinter;
+    [JsonPropertyName("NameWinter"), Name("NameWinter")]
     public string NameWinter
     {
         get => _nameWinter!;
@@ -32,6 +36,7 @@ public class IceHillData
     }
 
     private readonly string? _photoWinter;
+    [JsonPropertyName("PhotoWinter"), Name("PhotoWinter")]
     public string PhotoWinter
     {
         get => _photoWinter!;
@@ -39,6 +44,7 @@ public class IceHillData
     }
 
     private readonly string? _admArea;
+    [JsonPropertyName("AdmArea"), Name("AdmArea")]
     public string AdmArea
     {
         get => _admArea!;
@@ -46,6 +52,7 @@ public class IceHillData
     }
 
     private readonly string? _district;
+    [JsonPropertyName("District"), Name("District")]
     public string District
     {
         get => _district!;
@@ -53,6 +60,7 @@ public class IceHillData
     }
 
     private readonly string? _address;
+    [JsonPropertyName("Address"), Name("Address")]
     public string Address
     {
         get => _address!;
@@ -60,6 +68,7 @@ public class IceHillData
     }
 
     private readonly string? _email;
+    [JsonPropertyName("Email"), Name("Email")]
     public string Email
     {
         get => _email!;
@@ -67,6 +76,7 @@ public class IceHillData
     }
 
     private readonly string? _webSite;
+    [JsonPropertyName("WebSite"), Name("WebSite")]
     public string WebSite
     {
         get => _webSite!;
@@ -74,6 +84,7 @@ public class IceHillData
     }
 
     private readonly string? _helpPhone;
+    [JsonPropertyName("HelpPhone"), Name("HelpPhone")]
     public string HelpPhone
     {
         get => _helpPhone!;
@@ -81,6 +92,7 @@ public class IceHillData
     }
 
     private readonly string? _helpPhoneExtension;
+    [JsonPropertyName("HelpPhoneExtension"), Name("HelpPhoneExtension")]
     public string HelpPhoneExstencion
     {
         get => _helpPhoneExtension!;
@@ -88,6 +100,7 @@ public class IceHillData
     }
 
     private readonly string? _workingHoursWinter;
+    [JsonPropertyName("WorkingHoursWinter"), Name("WorkingHoursWinter")]
     public string WorkingHoursWinter
     {
         get => _workingHoursWinter!;
@@ -95,6 +108,7 @@ public class IceHillData
     }
 
     private readonly string? _clarificationOfWorkingHoursWinter;
+    [JsonPropertyName("ClarificationOfWorkingHoursWinter"), Name("ClarificationOfWorkingHoursWinter")]
     public string ClarificationOfWorkingHoursWinter
     {
         get => _clarificationOfWorkingHoursWinter!;
@@ -102,6 +116,7 @@ public class IceHillData
     }
 
     private readonly string? _hasEquipmentRental;
+    [JsonPropertyName("HasEquipmentRental"), Name("HasEquipmentRental")]
     public string HasEquipmentRental
     {
         get => _hasEquipmentRental!;
@@ -109,6 +124,7 @@ public class IceHillData
     }
 
     private readonly string? _equipmentRentalComments;
+    [JsonPropertyName("EquipmentRentalComments"), Name("EquipmentRentalComments")]
     public string EquipmentRentalComments
     {
         get => _equipmentRentalComments!;
@@ -116,6 +132,7 @@ public class IceHillData
     }
 
     private readonly string? _hasTechService;
+    [JsonPropertyName("HasTechService"), Name("HasTechService")]
     public string HasTechService
     {
         get => _hasTechService!;
@@ -123,6 +140,7 @@ public class IceHillData
     }
 
     private readonly string? _techServiceComments;
+    [JsonPropertyName("TechServiceComments"), Name("TechServiceComments")]
     public string TechServiceComments
     {
         get => _techServiceComments!;
@@ -130,6 +148,7 @@ public class IceHillData
     }
 
     private readonly string? _hasDressingRoom;
+    [JsonPropertyName("HasDressingRoom"), Name("HasDressingRoom")]
     public string HasDressingRoom
     {
         get => _hasDressingRoom!;
@@ -137,6 +156,7 @@ public class IceHillData
     }
 
     private readonly string? _hasEatery;
+    [JsonPropertyName("HasEatery"), Name("HasEatery")]
     public string HasEatery
     {
         get => _hasEatery!;
@@ -144,6 +164,7 @@ public class IceHillData
     }
 
     private readonly string? _hasToilet;
+    [JsonPropertyName("HasToilet"), Name("HasToilet")]
     public string HasToilet
     {
         get => _hasToilet!;
@@ -151,6 +172,7 @@ public class IceHillData
     }
 
     private readonly string? _hasWifi;
+    [JsonPropertyName("HasWifi"), Name("HasWifi")]
     public string HasWifi
     {
         get => _hasWifi!;
@@ -158,6 +180,7 @@ public class IceHillData
     }
 
     private readonly string? _hasCashMachine;
+    [JsonPropertyName("HasCashMachine"), Name("HasCashMachine")]
     public string HasCashMachine
     {
         get => _hasCashMachine!;
@@ -165,6 +188,7 @@ public class IceHillData
     }
 
     private readonly string? _hasFirstAidPost;
+    [JsonPropertyName("HasFirstAidPost"), Name("HasFirstAidPost")]
     public string HasFirstAidPost
     {
         get => _hasFirstAidPost!;
@@ -172,6 +196,7 @@ public class IceHillData
     }
 
     private readonly string? _hasMusic;
+    [JsonPropertyName("HasMusic"), Name("HasMusic")]
     public string HasMusic
     {
         get => _hasMusic!;
@@ -179,6 +204,7 @@ public class IceHillData
     }
 
     private readonly string? _usagePeriodWinter;
+    [JsonPropertyName("UsagePeriodWinter"), Name("UsagePeriodWinter")]
     public string UsagePeriodWinter
     {
         get => _usagePeriodWinter!;
@@ -186,6 +212,7 @@ public class IceHillData
     }
 
     private readonly string? _dimensionsWinter;
+    [JsonPropertyName("DimensionsWinter"), Name("DimensionsWinter")]
     public string DimensionsWinter
     {
         get => _dimensionsWinter!;
@@ -193,6 +220,7 @@ public class IceHillData
     }
 
     private readonly string? _lighting;
+    [JsonPropertyName("Lighting"), Name("Lighting")]
     public string Lighting
     {
         get => _lighting!;
@@ -200,6 +228,7 @@ public class IceHillData
     }
 
     private readonly string? _surfaceTypeWinter;
+    [JsonPropertyName("SurfaceTypeWinter"), Name("SurfaceTypeWinter")]
     public string SurfaceTypeWinter
     {
         get => _surfaceTypeWinter!;
@@ -207,6 +236,7 @@ public class IceHillData
     }
 
     private readonly int _seats;
+    [JsonPropertyName("Seats"), Name("Seats")]
     public int Seats
     {
         get => _seats;
@@ -214,6 +244,7 @@ public class IceHillData
     }
 
     private readonly string? _piad;
+    [JsonPropertyName("Paid"), Name("Paid")]
     public string Paid
     {
         get => _piad!;
@@ -221,6 +252,7 @@ public class IceHillData
     }
 
     private readonly string? _paidComments;
+    [JsonPropertyName("PaidComments"), Name("PaidComments")]
     public string PaidComments
     {
         get => _paidComments!;
@@ -228,6 +260,7 @@ public class IceHillData
     }
 
     private readonly string? _disabilityFriendly;
+    [JsonPropertyName("DisabilityFriendly"), Name("DisabilityFriendly")]
     public string DisabilityFriendly
     {
         get => _disabilityFriendly!;
@@ -235,6 +268,7 @@ public class IceHillData
     }
 
     private readonly string? _servicesWinter;
+    [JsonPropertyName("ServicesWinter"), Name("ServicesWinter")]
     public string ServicesWinter
     {
         get => _servicesWinter!;
@@ -242,7 +276,7 @@ public class IceHillData
     }
 
     private readonly string? _geoData;
-    [JsonPropertyName("geoData")]
+    [JsonPropertyName("geoData"), Name("geoData")]
     public string GeoData
     {
         get => _geoData!;
@@ -250,7 +284,7 @@ public class IceHillData
     }
 
     private readonly string? _geoDataCenter;
-    [JsonPropertyName("geodata_center")]
+    [JsonPropertyName("geodata_center"), Name("geodata_center")]
     public string GeoDataCenter
     {
         get => _geoDataCenter!;
@@ -258,12 +292,15 @@ public class IceHillData
     }
 
     private readonly string? _geoArea;
-    [JsonPropertyName("geoarea")]
+    [JsonPropertyName("geoarea"), Name("geoarea")]
     public string GeoArea
     {
         get => _geoArea!;
         init {_geoArea= CheckStringFieldValue(value);}
     }
+
+    [Index(36), Name(""), Ignore]
+    public string Plug {get; init;} = "";
 
     [JsonConstructor]
     public IceHillData(long globalId = 0, string objectName = "", string nameWinter = "", string photoWinter = "", string admArea = "", string district = "", string address = "", string email = "", string webSite = "",
@@ -310,7 +347,7 @@ public class IceHillData
         GeoArea = geoArea;
     }
 
-    public string ConvertToJSON(out bool isConvertCorrect)
+    private string ConvertToJSON(out bool isConvertCorrect)
     {
         JsonSerializerOptions options = new JsonSerializerOptions
         {

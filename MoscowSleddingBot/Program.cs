@@ -17,7 +17,7 @@ builder.ConfigureAppConfiguration(configBuilder =>
 builder.ConfigureServices((context, services) =>
 {
     // string token = context.Configuration["MoscowSleddingBotToken"] ?? throw new Exception("Bot token wasnt found.");
-    string token = Environment.GetEnvironmentVariable("TOKEN")!;
+    string token = Environment.GetEnvironmentVariable("MoscowSleddingBotToken") ?? throw new Exception("Bot token wasnt found.");
 
     services.AddHttpClient("TelegramBotClient")
         .AddTypedClient<ITelegramBotClient>(_ => new TelegramBotClient(new TelegramBotClientOptions(token)));
