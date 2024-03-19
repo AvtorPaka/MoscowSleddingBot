@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoscowSleddingBot", "MoscowSleddingBot\MoscowSleddingBot.csproj", "{84691882-C0A0-4E80-9046-4FA5E1CF2E11}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLibrary", "DataLibrary\DataLibrary.csproj", "{21EE59CC-346A-48C1-9E02-C4A088774536}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{84691882-C0A0-4E80-9046-4FA5E1CF2E11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84691882-C0A0-4E80-9046-4FA5E1CF2E11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84691882-C0A0-4E80-9046-4FA5E1CF2E11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84691882-C0A0-4E80-9046-4FA5E1CF2E11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21EE59CC-346A-48C1-9E02-C4A088774536}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21EE59CC-346A-48C1-9E02-C4A088774536}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21EE59CC-346A-48C1-9E02-C4A088774536}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21EE59CC-346A-48C1-9E02-C4A088774536}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6AC7D98D-B551-4D76-95B4-F2BB4BC80F9A}
+	EndGlobalSection
+EndGlobal
