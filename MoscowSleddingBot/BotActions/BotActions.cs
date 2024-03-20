@@ -5,10 +5,11 @@ using Telegram.Bot.Types.ReplyMarkups;
 using System.Runtime.InteropServices;
 using MoscowSleddingBot.Additional;
 using DataLibrary;
+using System.Security.Cryptography;
 
 namespace MoscowSleddingBot.Actions;
 
-public static partial class BotActions
+public static class BotActions
 {
     public static async Task<Message> SendStartText(ITelegramBotClient telegramBotClient, Message message, CancellationToken cancellationToken)
     {
@@ -77,18 +78,20 @@ public static partial class BotActions
 
         string pathToOriginalFile = DirectoryHelper.GetDirectoryFromEnvironment("OriginalFilePath");
 
+        await telegramBotClient.AnswerCallbackQueryAsync(
+            callbackQueryId: callbackQuery.Id,
+            text: $"{Char.ConvertFromUtf32(int.Parse("23F3", System.Globalization.NumberStyles.HexNumber))} Downloading original file.",
+            cancellationToken: cancellationToken
+            );
+
         try
         {
             await using FileStream fs = System.IO.File.OpenRead(pathToOriginalFile!);
 
-            await telegramBotClient.AnswerCallbackQueryAsync(callbackQueryId: callbackQuery.Id,
-             text: $"{Char.ConvertFromUtf32(int.Parse("23F3", System.Globalization.NumberStyles.HexNumber))} Downloading original file.",
-            cancellationToken: cancellationToken);
-
             return await telegramBotClient.SendDocumentAsync(
              chatId: callbackQuery.Message!.Chat.Id,
              document: InputFile.FromStream(stream: fs, fileName: "MoscowIceHills.csv"),
-             caption: "Here you have the <b>original</b> file. Now you can send it to me and start looking for a place to sled <s>&#128759</s>",
+             caption: "Here you have the <b>original</b> file.\nNow you can send it to me and start looking for a place to sled <s>&#128759</s>",
              parseMode: ParseMode.Html,
              cancellationToken: cancellationToken
             );
@@ -102,6 +105,160 @@ public static partial class BotActions
          "<s>&#10071</s> <b>Failed</b> to download the original file. <s>&#10071</s> ");
     }
 
+    public static async Task<Message> FileMenuAction(ITelegramBotClient telegramBotClient, Message message, CancellationToken cancellationToken)
+    {
+        InlineKeyboardMarkup inlineKeyboard = new InlineKeyboardMarkup(new List<InlineKeyboardButton[]>()
+        {
+            new InlineKeyboardButton[]
+            {
+                InlineKeyboardButton.WithCallbackData(text: $"{Char.ConvertFromUtf32(int.Parse("1F503", System.Globalization.NumberStyles.HexNumber))} Sort data", callbackData: "/sortMenu"),
+                InlineKeyboardButton.WithCallbackData(text: $"{Char.ConvertFromUtf32(int.Parse("1F517", System.Globalization.NumberStyles.HexNumber))} Filter data", callbackData: "/filterMenu")
+            },
+            new InlineKeyboardButton[]
+            {
+                InlineKeyboardButton.WithCallbackData(text: $"{Char.ConvertFromUtf32(int.Parse("1F50D", System.Globalization.NumberStyles.HexNumber))} Show data", callbackData: "/showData"),
+                InlineKeyboardButton.WithCallbackData(text: $"{Char.ConvertFromUtf32(int.Parse("1F4E6", System.Globalization.NumberStyles.HexNumber))} Download data", callbackData: "/downloadMenu")
+            }
+        });
+
+        return await telegramBotClient.SendTextMessageAsync(
+            chatId: message.Chat.Id,
+            text: "What do you want <b>me</b> to do?",
+            parseMode: ParseMode.Html,
+            replyMarkup: inlineKeyboard,
+            cancellationToken: cancellationToken
+        );
+    }
+
+    public static async Task<Message> DownloadJsonDataAction(ITelegramBotClient telegramBotClient, CallbackQuery callbackQuery, CancellationToken cancellationToken)
+    {
+        if (callbackQuery.Message == null) { return await SendUnknowCallbackQueryDataActionAsync(telegramBotClient, callbackQuery, cancellationToken); }
+
+        string userName = callbackQuery.From.Username!.ToString();
+        string chatId = callbackQuery.Message.Chat.Id.ToString();
+        string pathToLoadData = DirectoryHelper.GetDirectoryFromEnvironment("PathToLoadedData", $"{chatId}_{userName}.json");
+        Console.WriteLine(pathToLoadData);
+
+        await telegramBotClient.AnswerCallbackQueryAsync(
+            callbackQueryId: callbackQuery.Id,
+            text: $"{Char.ConvertFromUtf32(int.Parse("23F3", System.Globalization.NumberStyles.HexNumber))} Downloading file.",
+            cancellationToken: cancellationToken
+            );
+
+        if (!System.IO.File.Exists(pathToLoadData))
+        {
+            return await VariableErrorCallbackAction(telegramBotClient, callbackQuery, cancellationToken, "Seems like you didn't upload the file.\nI have nothing to work with <s>&#128577</s>");
+        }
+        try
+        {
+            await using FileStream fs = System.IO.File.OpenRead(pathToLoadData!);
+
+            await telegramBotClient.SendDocumentAsync(
+             chatId: callbackQuery.Message!.Chat.Id,
+             document: InputFile.FromStream(stream: fs, fileName: $"{userName}.json"),
+             caption: "<s>&#9989</s> And here it is!",
+             parseMode: ParseMode.Html,
+             cancellationToken: cancellationToken
+            );
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"{ex.Message}\nException occured while trying to handle {callbackQuery.Data}.");
+
+            await VariableErrorCallbackAction(telegramBotClient, callbackQuery, cancellationToken,
+            "<s>&#10071</s> <b>Failed</b> to download the file. Try again later");
+        }
+
+        return await FileMenuAction(telegramBotClient, callbackQuery.Message, cancellationToken);
+    }
+
+    public static async Task<Message> DownloadCSVDataAction(ITelegramBotClient telegramBotClient, CallbackQuery callbackQuery, CancellationToken cancellationToken)
+    {
+        if (callbackQuery.Message == null) { return await SendUnknowCallbackQueryDataActionAsync(telegramBotClient, callbackQuery, cancellationToken); }
+
+        string userName = callbackQuery.From.Username!.ToString();
+        string chatId = callbackQuery.Message.Chat.Id.ToString();
+        string pathToLoadData = DirectoryHelper.GetDirectoryFromEnvironment("PathToLoadedData", $"{chatId}_{userName}.json");
+        Console.WriteLine(pathToLoadData);
+
+        await telegramBotClient.AnswerCallbackQueryAsync(
+            callbackQueryId: callbackQuery.Id,
+            text: $"{Char.ConvertFromUtf32(int.Parse("23F3", System.Globalization.NumberStyles.HexNumber))} Downloading file.",
+            cancellationToken: cancellationToken
+            );
+
+        if (!System.IO.File.Exists(pathToLoadData))
+        {
+            return await VariableErrorCallbackAction(telegramBotClient, callbackQuery, cancellationToken, "Seems like you didn't upload the file.\nI have nothing to work with <s>&#128577</s>");
+        }
+
+        string pathToServeCsvLoading = DirectoryHelper.GetDirectoryFromEnvironment("PathToLoadedData", $"{chatId}_{userName}_tmp.csv");
+        try
+        {
+            await using FileStream fs = System.IO.File.OpenRead(pathToLoadData!);
+            JSONProcessing jsonToDataConv = new JSONProcessing();
+            List<IceHillData> lstWithData = jsonToDataConv.Read(fs, out bool isConvCorrect);
+            fs.Close();
+            if (!isConvCorrect)
+            {
+                throw new Exception("Failed to convert .json to data collection.");
+            }
+
+            CSVProcessing csvWriter2 = new CSVProcessing(pathToServeCsvLoading);
+            Stream streamCSVLoading = csvWriter2.Write(lstWithData, out bool isWC2);
+            streamCSVLoading.Close();
+
+            if (!isWC2) {throw new Exception("Failed to write data collection to temporary .csv file.");}
+
+            await using FileStream fsCsv = System.IO.File.OpenRead(pathToServeCsvLoading!);
+
+            await telegramBotClient.SendDocumentAsync(
+             chatId: callbackQuery.Message!.Chat.Id,
+             document: InputFile.FromStream(stream: fsCsv, fileName: $"{userName}.csv"),
+             caption: "<s>&#9989</s> And here it is!",
+             parseMode: ParseMode.Html,
+             cancellationToken: cancellationToken
+            );
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"{ex.Message}\nException occured while trying to handle {callbackQuery.Data}.");
+            await VariableErrorCallbackAction(telegramBotClient, callbackQuery, cancellationToken,
+            "<s>&#10071</s> <b>Failed</b> to download the file. Try again later");
+        }
+        finally
+        {
+            if (System.IO.File.Exists(pathToServeCsvLoading))
+            {
+                System.IO.File.Delete(pathToServeCsvLoading);
+            }
+        }
+
+        return await FileMenuAction(telegramBotClient, callbackQuery.Message, cancellationToken);
+    }
+
+    public static async Task<Message> downloadMenuAction(ITelegramBotClient telegramBotClient, CallbackQuery callbackQuery, CancellationToken cancellationToken)
+    {
+        if (callbackQuery.Message == null) { return await SendUnknowCallbackQueryDataActionAsync(telegramBotClient, callbackQuery, cancellationToken); }
+
+        InlineKeyboardMarkup inlineKeyboard = new InlineKeyboardMarkup(new List<InlineKeyboardButton[]>
+        {
+            new InlineKeyboardButton[]
+            {
+                InlineKeyboardButton.WithCallbackData(text: $"{Char.ConvertFromUtf32(int.Parse("1F4D1", System.Globalization.NumberStyles.HexNumber))} .csv", callbackData: "/downloadCSV"),
+                InlineKeyboardButton.WithCallbackData(text: $"{Char.ConvertFromUtf32(int.Parse("2668", System.Globalization.NumberStyles.HexNumber))} .json", callbackData: "/downloadJSON"),
+            }
+        });
+
+        return await telegramBotClient.EditMessageTextAsync(
+            chatId: callbackQuery.Message.Chat.Id,
+            messageId: callbackQuery.Message.MessageId,
+            text: "Choose data format",
+            replyMarkup: inlineKeyboard,
+            cancellationToken: cancellationToken
+        );
+    }
+
     public static async Task<Message> LoadFileFromUserAction(ITelegramBotClient telegramBotClient, Message message, CancellationToken cancellationToken)
     {
         if (message.Document == null) { return await VariableErrorMessageAction(telegramBotClient, message, cancellationToken, "<b>Nothing</b> has been given as a document."); }
@@ -111,9 +268,9 @@ public static partial class BotActions
         var fileInfo = await telegramBotClient.GetFileAsync(fileId, cancellationToken);
         var filePath = fileInfo.FilePath;
         if (filePath == null) { return await VariableErrorMessageAction(telegramBotClient, message, cancellationToken, $"<b>Failed</b> to download {document.FileName}, try again later."); }
-        string userId = message.From!.Username!.ToString();
+        string userName = message.From!.Username!.ToString();
         string chatId = message.Chat.Id.ToString();
-        string pathToLoadData = DirectoryHelper.GetDirectoryFromEnvironment("PathToLoadedData", $"{chatId}_{userId}");
+        string pathToLoadData = DirectoryHelper.GetDirectoryFromEnvironment("PathToLoadedData", $"{chatId}_{userName}");
 
         try
         {
@@ -154,20 +311,22 @@ public static partial class BotActions
 
                     return await telegramBotClient.SendTextMessageAsync(
                         chatId: message.Chat.Id,
-                        text: "The file should be either <b>.json</b> or <b>.csv</b>. If you don't have one use button below.",
+                        text: "The file should be either <b>.json</b> or <b>.csv</b>.\nIf you don't have one use button below.",
                         parseMode: ParseMode.Html,
                         replyMarkup: getNewFileInlineKeyBoard,
                         cancellationToken: cancellationToken
                     );
                 }
+
                 JSONProcessing jsonWriter = new JSONProcessing($"{pathToLoadData}.json");
                 Stream stream = jsonWriter.Write(lstTmpData2, out bool isJsonWriteCorrect);
+                Console.WriteLine($"{pathToLoadData}.json was succesfully downloaded to the local directory.");
                 stream.Dispose();
                 stream.Close();
             }
             else
-            {   
-                //testing - it's working but got some trouble with Thread access
+            {
+                // testing - it's working but got some trouble with Thread access
 
                 // CSVProcessing csvWriter2 = new CSVProcessing($"{pathToLoadData}.csv");
                 // Stream stream3 = csvWriter2.Write(lstTmpData, out bool isWC2);
@@ -194,11 +353,13 @@ public static partial class BotActions
             }
         }
 
-        return await telegramBotClient.SendTextMessageAsync(
+        await telegramBotClient.SendTextMessageAsync(
             chatId: chatId,
             text: $"<b>{document.FileName}</b> was <b>succesfuly</b> uploaded.",
             parseMode: ParseMode.Html,
             cancellationToken: cancellationToken
         );
+
+        return await FileMenuAction(telegramBotClient, message, cancellationToken);
     }
 }

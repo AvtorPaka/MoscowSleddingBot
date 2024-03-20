@@ -23,10 +23,13 @@ public class CallbackQueryService: ICallbackQueryService
         Task<Message> action = callbackQuery.Data switch
         {
             "/originalFile" => BotActions.SendOriginalFile(_telegramBotClient, callbackQuery, cancellationToken),
+            "/downloadMenu" => BotActions.downloadMenuAction(_telegramBotClient, callbackQuery, cancellationToken),
+            "/downloadJSON" => BotActions.DownloadJsonDataAction(_telegramBotClient, callbackQuery, cancellationToken),
+            "/downloadCSV" => BotActions.DownloadCSVDataAction(_telegramBotClient, callbackQuery, cancellationToken),
             _ => BotActions.SendUnknowCallbackQueryDataActionAsync(_telegramBotClient, callbackQuery, cancellationToken)
         };
 
         Message sentMessage = await action;
-        _logger.LogInformation("The message was sent with id {SentMessageId}   {DateTime}", sentMessage.MessageId, DateTime.Now);
+        _logger.LogInformation("The message was sent with id {SentMessageId} on {DateTime}", sentMessage.MessageId, DateTime.Now);
     }
 }

@@ -310,64 +310,41 @@ public class IceHillData
     string geoData, string geoDataCenter, string geoArea)
     {
         GlobalId = globalid;
-        ObjectName = objectname;
-        NameWinter = namewinter;
-        PhotoWinter = photowinter;
-        AdmArea = admarea;
-        District = district;
-        Address = address;
-        Email = email;
-        WebSite = website;
-        HelpPhone = helpphone;
-        HelpPhoneExtension = helpPhoneExtension;
-        WorkingHoursWinter = workingHoursWinter;
-        ClarificationOfWorkingHoursWinter = clarificationOfWorkingHoursWinter;
-        HasEquipmentRental = hasEquipmentRental;
-        EquipmentRentalComments = equipmentRentalComments;
-        HasTechService = hasTechService;
-        TechServiceComments = techServiceComments;
-        HasDressingRoom = hasDressingRoom;
-        HasEatery = hasEatery;
-        HasToilet = hasToilet;
-        HasWifi = hasWifi;
-        HasCashMachine = hasCashMachine;
-        HasFirstAidPost = hasFirstAidPost;
-        HasMusic = hasMusic;
-        UsagePeriodWinter = usagePeriodWinter;
-        DimensionsWinter = dimensionsWinter;
-        Lighting = lighting;
-        SurfaceTypeWinter = surfaceTypeWinter;
+        ObjectName = objectname ?? "";
+        NameWinter = namewinter ?? "";
+        PhotoWinter = photowinter ?? "";
+        AdmArea = admarea ?? "";
+        District = district ?? "";
+        Address = address ?? "";
+        Email = email ?? "";
+        WebSite = website ?? "";
+        HelpPhone = helpphone ?? "";
+        HelpPhoneExtension = helpPhoneExtension ?? "";
+        WorkingHoursWinter = workingHoursWinter ?? "";
+        ClarificationOfWorkingHoursWinter = clarificationOfWorkingHoursWinter ?? "";
+        HasEquipmentRental = hasEquipmentRental ?? "";
+        EquipmentRentalComments = equipmentRentalComments ?? "";
+        HasTechService = hasTechService ?? "";
+        TechServiceComments = techServiceComments ?? "";
+        HasDressingRoom = hasDressingRoom ?? "";
+        HasEatery = hasEatery ?? "";
+        HasToilet = hasToilet ?? "";
+        HasWifi = hasWifi ?? "";
+        HasCashMachine = hasCashMachine ?? "";
+        HasFirstAidPost = hasFirstAidPost ?? "";
+        HasMusic = hasMusic ?? "";
+        UsagePeriodWinter = usagePeriodWinter ?? "";
+        DimensionsWinter = dimensionsWinter ?? "";
+        Lighting = lighting ?? "";
+        SurfaceTypeWinter = surfaceTypeWinter ?? "";
         Seats = seats;
-        Paid = paid;
-        PaidComments = paidComments;
-        DisabilityFriendly = disabilityFriendly;
-        ServicesWinter = servicesWinter;
-        GeoData = geoData;
-        GeoDataCenter = geoDataCenter;
-        GeoArea = geoArea;
-    }
-
-    private string ConvertToJSON(out bool isConvertCorrect)
-    {
-        JsonSerializerOptions options = new JsonSerializerOptions
-        {
-            WriteIndented = true,
-            Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
-            AllowTrailingCommas = true
-        };
-
-        try
-        {
-            string jsonData = JsonSerializer.Serialize<IceHillData>(this, options);
-            isConvertCorrect = true;
-            return jsonData;
-        }
-        catch (Exception ex)
-        {   
-            Console.WriteLine($"{ex.Message}\nException occured while trying to Serialize IceHillData object - {this.GlobalId}");
-            isConvertCorrect = false;
-            return string.Empty;
-        }
+        Paid = paid ?? "";
+        PaidComments = paidComments ?? "";
+        DisabilityFriendly = disabilityFriendly ?? "";
+        ServicesWinter = servicesWinter ?? "";
+        GeoData = geoData ?? "";
+        GeoDataCenter = geoDataCenter ?? "";
+        GeoArea = geoArea ?? "";
     }
 
     private static string CheckStringFieldValue(string value)
