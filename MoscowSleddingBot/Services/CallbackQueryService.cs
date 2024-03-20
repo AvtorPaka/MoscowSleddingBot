@@ -26,6 +26,8 @@ public class CallbackQueryService: ICallbackQueryService
             "/downloadMenu" => BotActions.downloadMenuAction(_telegramBotClient, callbackQuery, cancellationToken),
             "/downloadJSON" => BotActions.DownloadJsonDataAction(_telegramBotClient, callbackQuery, cancellationToken),
             "/downloadCSV" => BotActions.DownloadCSVDataAction(_telegramBotClient, callbackQuery, cancellationToken),
+            "/showData" => BotActions.ShowDataAction(_telegramBotClient, callbackQuery, cancellationToken),
+            "/sortMenu" => BotActions.SortDataMenu(_telegramBotClient, callbackQuery, cancellationToken),
             _ => BotActions.SendUnknowCallbackQueryDataActionAsync(_telegramBotClient, callbackQuery, cancellationToken)
         };
 

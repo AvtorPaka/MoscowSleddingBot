@@ -1,5 +1,4 @@
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 
@@ -14,7 +13,6 @@ public class JSONProcessing
         WriteIndented = true,
         PropertyNameCaseInsensitive = true,
         Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
-        // Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping, //removes "" with \" not the best solution
         AllowTrailingCommas = true
     };
 
@@ -49,21 +47,7 @@ public class JSONProcessing
             return Stream.Null;
         }
         try
-        {   
-            //trying to fix the \u0022 symbol
-
-            // TextEncoderSettings encoderSettings = new TextEncoderSettings();
-            // encoderSettings.AllowCharacters('\u0022');
-            // encoderSettings.AllowRanges(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic);
-
-            // JsonSerializerOptions optionsWrite = new JsonSerializerOptions
-            // {
-            //     WriteIndented = true,
-            //     PropertyNameCaseInsensitive = true,
-            //     Encoder = JavaScriptEncoder.Create(encoderSettings),
-            //     AllowTrailingCommas = true
-            // };
-
+        {
             using Stream fs = File.Open(PathToWriteData, FileMode.Create, FileAccess.ReadWrite);
             JsonSerializer.Serialize<List<IceHillData>>(fs, lstWithData, options);
 
@@ -71,10 +55,10 @@ public class JSONProcessing
             return fs;
         }
         catch (Exception ex)
-        {   
+        {
             Console.WriteLine($"{ex.Message}\nError occured while handling JSON Write.");
-isWriteCorrect = false;
-return Stream.Null;
+            isWriteCorrect = false;
+            return Stream.Null;
         }
     }
 }

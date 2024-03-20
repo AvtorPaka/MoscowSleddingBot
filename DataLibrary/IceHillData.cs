@@ -1,10 +1,5 @@
-﻿using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Text.Encodings.Web;
-using System.Text.Unicode;
-using CsvHelper;
+﻿using System.Text.Json.Serialization;
 using CsvHelper.Configuration.Attributes;
-using System.Text;
 
 namespace DataLibrary;
 
@@ -350,6 +345,6 @@ public class IceHillData
     private static string CheckStringFieldValue(string value)
     {
         if (value == null) {return "";}
-        else {return value;}
+        else {return value.Replace("\u0022", "");}
     }
 }
