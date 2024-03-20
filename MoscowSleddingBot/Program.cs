@@ -10,7 +10,6 @@ builder.ConfigureAppConfiguration((context, config) =>
     config.AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true);
 });
 
-// Logging configuration.
 // builder.ConfigureLogging(loggingBuilder =>
 // {
 //     var loggerPath = PathGetter.Get("var");

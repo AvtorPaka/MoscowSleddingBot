@@ -10,13 +10,6 @@ namespace MoscowSleddingBot.Actions;
 
 public static class BotActions
 {   
-    internal static readonly List<string> lstWithHeadrs = new List<string>{
-        "global_id","ObjectName","NameWinter","PhotoWinter","AdmArea","District","Address","Email","WebSite","HelpPhone",
-        "HelpPhoneExtension","WorkingHoursWinter","ClarificationOfWorkingHoursWinter","HasEquipmentRental","EquipmentRentalComments",
-        "HasTechService","TechServiceComments","HasDressingRoom","HasEatery","HasToilet","HasWifi","HasCashMachine","HasFirstAidPost",
-        "HasMusic","UsagePeriodWinter","DimensionsWinter","Lighting","SurfaceTypeWinter","Seats","Paid","PaidComments","DisabilityFriendly",
-        "ServicesWinter","geoData","geodata_center","geoarea"};
-
 
     public static async Task<Message> SendStartText(ITelegramBotClient telegramBotClient, Message message, CancellationToken cancellationToken)
     {
@@ -118,12 +111,12 @@ public static class BotActions
         {
             new InlineKeyboardButton[]
             {
-                InlineKeyboardButton.WithCallbackData(text: $"{Char.ConvertFromUtf32(int.Parse("1F503", System.Globalization.NumberStyles.HexNumber))} Sort data", callbackData: "/sortMenu"),
-                InlineKeyboardButton.WithCallbackData(text: $"{Char.ConvertFromUtf32(int.Parse("1F517", System.Globalization.NumberStyles.HexNumber))} Filter data", callbackData: "/filterMenu")
+                InlineKeyboardButton.WithCallbackData(text: $"{Char.ConvertFromUtf32(int.Parse("1F50D", System.Globalization.NumberStyles.HexNumber))} Show data", callbackData: "/showData"),
             },
             new InlineKeyboardButton[]
             {
-                InlineKeyboardButton.WithCallbackData(text: $"{Char.ConvertFromUtf32(int.Parse("1F50D", System.Globalization.NumberStyles.HexNumber))} Show data", callbackData: "/showData"),
+                InlineKeyboardButton.WithCallbackData(text: $"{Char.ConvertFromUtf32(int.Parse("1F503", System.Globalization.NumberStyles.HexNumber))} Sort data", callbackData: "/sortMenu"),
+                InlineKeyboardButton.WithCallbackData(text: $"{Char.ConvertFromUtf32(int.Parse("1F517", System.Globalization.NumberStyles.HexNumber))} Filter data", callbackData: "/filterMenu")
             },
             new InlineKeyboardButton[]
             {
@@ -140,41 +133,77 @@ public static class BotActions
         );
     }
 
-    // public static async Task<Message>
-
-    public static async Task<Message> SortDataMenu(ITelegramBotClient telegramBotClient, CallbackQuery callbackQuery, CancellationToken cancellationToken)
+    public static async Task<Message> FieldDataMenu(ITelegramBotClient telegramBotClient, CallbackQuery callbackQuery, CancellationToken cancellationToken, bool isSorting)
     {   
-        List<InlineKeyboardButton[]> lstWithButtonsRows = new List<InlineKeyboardButton[]>();
-        for (int i = 0; i < lstWithHeadrs.Count; i += 2)
-        {   
-            InlineKeyboardButton[] curButtons;
-            if (i + 1 < lstWithHeadrs.Count)
-            {
-                curButtons = new InlineKeyboardButton[]
-                {
-                    InlineKeyboardButton.WithCallbackData(text: lstWithHeadrs[i], callbackData: lstWithHeadrs[i]),
-                    InlineKeyboardButton.WithCallbackData(text: lstWithHeadrs[i + 1], callbackData: lstWithHeadrs[i + 1]),
-                };
-            }
-            else
-            {
-                curButtons = new InlineKeyboardButton[]
-                {
-                    InlineKeyboardButton.WithCallbackData(text: lstWithHeadrs[i], callbackData: lstWithHeadrs[i])
-                };
-            }
-            lstWithButtonsRows.Add(curButtons);
-        }
-        InlineKeyboardMarkup inlineKeyboard = new InlineKeyboardMarkup(lstWithButtonsRows);
+        InlineKeyboardMarkup inlineKeyboard = isSorting ? SortHelper.CreateSortingMarkup() : FilterHelper.CreateFilteringMarkup();
+        string textActionToShow;
+        if (isSorting) {textActionToShow =$"<b>Select</b> the field by which the data will be <b>sorted</b> and it's sorting direction:\n<s>&#11015</s>Arrow down - <b>ascending</b>\n<s>&#11014</s>Arrow up - <b>descending</b>";}
+        else {textActionToShow = $"<b>Select</b> the field by which the data will be <b>filtered</b>";}
 
         return await telegramBotClient.EditMessageTextAsync(
             chatId: callbackQuery.Message!.Chat.Id,
             messageId: callbackQuery.Message.MessageId,
-            text: "<b>Select</b> the field by which the data will be sorted:",
+            text: textActionToShow,
             parseMode: ParseMode.Html,
             replyMarkup: inlineKeyboard,
             cancellationToken: cancellationToken
         );
+    }
+
+    public static async Task<Message> SortDataAction(ITelegramBotClient telegramBotClient, CallbackQuery callbackQuery, CancellationToken cancellationToken)
+    {
+        if (callbackQuery.Message == null || callbackQuery.Data == null) { return await SendUnknowCallbackQueryDataActionAsync(telegramBotClient, callbackQuery, cancellationToken); }
+
+        string userName = callbackQuery.From.Username!.ToString();
+        string chatId = callbackQuery.Message.Chat.Id.ToString();
+        string pathToLoadData = DirectoryHelper.GetDirectoryFromEnvironment("PathToLoadedData", $"{chatId}_{userName}.json");
+
+        await telegramBotClient.AnswerCallbackQueryAsync(
+            callbackQueryId: callbackQuery.Id,
+            text: $"{Char.ConvertFromUtf32(int.Parse("1F503", System.Globalization.NumberStyles.HexNumber))} Sorting data.",
+            cancellationToken: cancellationToken
+            );
+
+        string callbackData = callbackQuery.Data;
+        string trimmedCallbackData = callbackData[..^2];
+        bool needToReverse = !(callbackData.Split('.')[^1] == "A");
+        string sortingWay = callbackData.Split('.')[^1] == "A" ? "Ascending" : "Descending";
+
+        if (!System.IO.File.Exists(pathToLoadData))
+        {
+            return await VariableErrorCallbackAction(telegramBotClient, callbackQuery, cancellationToken, "Seems like you didn't upload the file.\nI have nothing to work with <s>&#128577</s>");
+        }
+        try
+        {
+            await using FileStream fs = System.IO.File.OpenRead(pathToLoadData!);
+            JSONProcessing jsonToDataConv = new JSONProcessing();
+            List<IceHillData> lstWithData = jsonToDataConv.Read(fs, out bool isConvCorrect);
+            fs.Close();
+            if (!isConvCorrect) {throw new Exception("Failed to convert .json to data collection.");}
+
+            List<IceHillData> lstSortedData = SortHelper.SortDataByField(lstWithData, trimmedCallbackData, needToReverse);
+
+            JSONProcessing jsonDataRewriter = new JSONProcessing(pathToLoadData);
+            Stream streamToClose = jsonDataRewriter.Write(lstSortedData, out bool isWCS);
+            streamToClose.Close();
+            if (!isWCS) {throw new Exception("Failed to rewrite sorted data to the local dir.");}
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"{ex.Message}\nException occured while trying to handle {callbackQuery.Data}.");
+            return await VariableErrorCallbackAction(telegramBotClient, callbackQuery, cancellationToken,
+            "<s>&#10071</s><b>Failed</b> to sort data. Try again later");
+        }
+
+        await telegramBotClient.EditMessageTextAsync(
+            chatId: callbackQuery.Message.Chat.Id,
+            messageId: callbackQuery.Message.MessageId,
+            text: $"<s>&#9989</s> Data was <b>successfully</b> sorted.\nField : {trimmedCallbackData}\nSorting direction : {sortingWay}",
+            parseMode: ParseMode.Html,
+            cancellationToken: cancellationToken
+        );
+
+        return await FileMenuAction(telegramBotClient, callbackQuery.Message, cancellationToken);
     }
 
     public static async Task<Message> ShowDataAction(ITelegramBotClient telegramBotClient, CallbackQuery callbackQuery, CancellationToken cancellationToken)
@@ -274,7 +303,6 @@ public static class BotActions
         string userName = callbackQuery.From.Username!.ToString();
         string chatId = callbackQuery.Message.Chat.Id.ToString();
         string pathToLoadData = DirectoryHelper.GetDirectoryFromEnvironment("PathToLoadedData", $"{chatId}_{userName}.json");
-        Console.WriteLine(pathToLoadData);
 
         await telegramBotClient.AnswerCallbackQueryAsync(
             callbackQueryId: callbackQuery.Id,
@@ -332,7 +360,7 @@ public static class BotActions
         return await FileMenuAction(telegramBotClient, callbackQuery.Message, cancellationToken);
     }
 
-    public static async Task<Message> downloadMenuAction(ITelegramBotClient telegramBotClient, CallbackQuery callbackQuery, CancellationToken cancellationToken)
+    public static async Task<Message> DownloadMenuAction(ITelegramBotClient telegramBotClient, CallbackQuery callbackQuery, CancellationToken cancellationToken)
     {
         if (callbackQuery.Message == null) { return await SendUnknowCallbackQueryDataActionAsync(telegramBotClient, callbackQuery, cancellationToken); }
 
@@ -348,7 +376,7 @@ public static class BotActions
         return await telegramBotClient.EditMessageTextAsync(
             chatId: callbackQuery.Message.Chat.Id,
             messageId: callbackQuery.Message.MessageId,
-            text: "Choose data format",
+            text: "Select data format",
             replyMarkup: inlineKeyboard,
             cancellationToken: cancellationToken
         );
