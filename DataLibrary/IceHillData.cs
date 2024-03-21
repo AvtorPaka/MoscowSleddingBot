@@ -3,6 +3,9 @@ using CsvHelper.Configuration.Attributes;
 
 namespace DataLibrary;
 
+/// <summary>
+/// A class for storing data
+/// </summary>
 [Serializable, CultureInfo("ru-RU")]
 public class IceHillData
 {   
@@ -342,6 +345,11 @@ public class IceHillData
         GeoArea = geoArea ?? "";
     }
 
+    /// <summary>
+    /// Method for checking a string for null
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
     private static string CheckStringFieldValue(string value)
     {
         if (value == null) {return "";}

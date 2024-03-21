@@ -6,6 +6,9 @@ using MoscowSleddingBot.Actions;
 
 namespace MoscowSleddingBot.Services;
 
+/// <summary>
+/// A class for processing callback queries
+/// </summary>
 public class CallbackQueryService: ICallbackQueryService
 {
     private readonly ITelegramBotClient _telegramBotClient;
@@ -17,6 +20,12 @@ public class CallbackQueryService: ICallbackQueryService
         _logger = logger;
     }
 
+    /// <summary>
+    /// Method of processing callback requests
+    /// </summary>
+    /// <param name="callbackQuery"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public async Task BotOnCallbackQueryReceived(CallbackQuery callbackQuery, CancellationToken cancellationToken)
     {   
        _logger.LogInformation("---Received callback - Data: {mType} - MessageType : {dmType} - ID: {messageID} - ChatID : {chatID} - DateTime : {date}\n---UserData : {userData} ",

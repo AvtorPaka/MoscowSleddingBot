@@ -3,6 +3,9 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace MoscowSleddingBot.Additional;
 
+/// <summary>
+/// A static class for processing filtering-related processes
+/// </summary>
 public static class FilterHelper
 {
 
@@ -13,6 +16,10 @@ public static class FilterHelper
         "HasMusic","UsagePeriodWinter","DimensionsWinter","Lighting","SurfaceTypeWinter","Seats","Paid","PaidComments","DisabilityFriendly",
         "ServicesWinter","geoData","geodata_center","geoarea","AdmArea and HasWifi"};
 
+    /// <summary>
+    /// a method for creating a keyboard from buttons with fields for filtering
+    /// </summary>
+    /// <returns>Keyboard with buttons</returns>
     public static InlineKeyboardMarkup CreateFilteringMarkup()
     {
         List<InlineKeyboardButton[]> lstWithButtonsRows = new List<InlineKeyboardButton[]>();
@@ -40,6 +47,13 @@ public static class FilterHelper
         return new InlineKeyboardMarkup(lstWithButtonsRows);
     }
 
+    /// <summary>
+    /// a method for creating a keyboard under the input window from buttons- unique values by field
+    /// </summary>
+    /// <param name="lstWithData">A list with data</param>
+    /// <param name="fieldName">The field that the values are being searched for</param>
+    /// <param name="isNoData">is there any data in the received list of values</param>
+    /// <returns>Keyboard with buttons</returns>
     public static ReplyKeyboardMarkup CreateValuesMarkup(List<IceHillData> lstWithData, string fieldName, out bool isNoData)
     {
         List<string> lstUniqueFields = FindUniqueValuesInField(lstWithData, fieldName, out isNoData);
@@ -68,6 +82,13 @@ public static class FilterHelper
         return new ReplyKeyboardMarkup(lstWithButtonsFieldValues){ResizeKeyboard = true};
     }
 
+    /// <summary>
+    /// Method for getting a list of unique values by field
+    /// </summary>
+    /// <param name="lstWithData">A list with data</param>
+    /// <param name="fieldName">The field that the values are being searched for</param>
+    /// <param name="isNoData">is there any data in the received list of values</param>
+    /// <returns>list of unique values by field</returns>
     private static List<string> FindUniqueValuesInField(List<IceHillData> lstWithData, string fieldName, out bool isNoData)
     {
         List<string> lstUniqueFields = fieldName switch
@@ -120,6 +141,13 @@ public static class FilterHelper
         return lstUniqueFields;
     }
 
+    /// <summary>
+    /// A method for filtering data by a specific field and value
+    /// </summary>
+    /// <param name="lstWithData">A list with data</param>
+    /// <param name="fieldName">The field that the values are being filtered for</param>
+    /// <param name="filterParam">filtering parameter</param>
+    /// <returns>filtered data</returns>
     public static List<IceHillData> FilterDataByFieldAndParam(List<IceHillData> lstWithData, string fieldName, string filterParam)
     {
          List<IceHillData> lstFilteredData  = fieldName switch

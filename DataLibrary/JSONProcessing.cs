@@ -4,6 +4,9 @@ using System.Text.Unicode;
 
 namespace DataLibrary;
 
+/// <summary>
+/// A class for working with Json files
+/// </summary>
 public class JSONProcessing
 {
     private string? PathToWriteData { get; set; }
@@ -21,6 +24,12 @@ public class JSONProcessing
         PathToWriteData = path;
     }
 
+    /// <summary>
+    /// A method for reading data from a json file into a list of objects
+    /// </summary>
+    /// <param name="streamLoad"></param>
+    /// <param name="isConvCorrect"></param>
+    /// <returns></returns>
     public List<IceHillData> Read(FileStream streamLoad, out bool isConvCorrect)
     {
         try
@@ -39,6 +48,12 @@ public class JSONProcessing
         }
     }
 
+    /// <summary>
+    /// A method for writing data from a list of class objects to a file in json format
+    /// </summary>
+    /// <param name="lstWithData"></param>
+    /// <param name="isWriteCorrect"></param>
+    /// <returns></returns>
     public Stream Write(List<IceHillData> lstWithData, out bool isWriteCorrect)
     {
         if (PathToWriteData == null)

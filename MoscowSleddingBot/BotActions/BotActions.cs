@@ -11,6 +11,13 @@ namespace MoscowSleddingBot.Actions;
 public static class BotActions
 {   
 
+    /// <summary>
+    /// The method for processing the initial request to the bot
+    /// </summary>
+    /// <param name="telegramBotClient"></param>
+    /// <param name="message"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public static async Task<Message> SendStartText(ITelegramBotClient telegramBotClient, Message message, CancellationToken cancellationToken)
     {
         InlineKeyboardMarkup getNewFileInlineKeyBoard = new InlineKeyboardMarkup(new List<InlineKeyboardButton[]>{
@@ -26,6 +33,13 @@ public static class BotActions
         );
     }
 
+    /// <summary>
+    /// A method for processing an unidentified message
+    /// </summary>
+    /// <param name="telegramBotClient"></param>
+    /// <param name="message"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public static async Task<Message> SendUnknowMessageTextActionAsync(ITelegramBotClient telegramBotClient, Message message, CancellationToken cancellationToken)
     {
         return await telegramBotClient.SendTextMessageAsync(
@@ -36,6 +50,14 @@ public static class BotActions
         );
     }
 
+    /// <summary>
+    /// A method for processing and sending error information
+    /// </summary>
+    /// <param name="telegramBotClient"></param>
+    /// <param name="message"></param>
+    /// <param name="cancellationToken"></param>
+    /// <param name="errorMessage"></param>
+    /// <returns></returns>
     public static async Task<Message> VariableErrorMessageAction(ITelegramBotClient telegramBotClient, Message message, CancellationToken cancellationToken,
      string errorMessage = $"<s>&#10071</s> <b>Error</b> occured. <s>&#10071</s>")
     {
@@ -47,6 +69,14 @@ public static class BotActions
         );
     }
 
+    /// <summary>
+    /// A method for processing and sending error information
+    /// </summary>
+    /// <param name="telegramBotClient"></param>
+    /// <param name="callbackQuery"></param>
+    /// <param name="cancellationToken"></param>
+    /// <param name="errorMessage"></param>
+    /// <returns></returns>
     public static async Task<Message> VariableErrorCallbackAction(ITelegramBotClient telegramBotClient, CallbackQuery callbackQuery, CancellationToken cancellationToken,
     string errorMessage = $"<s>&#10071</s> <b>Error</b> occured. <s>&#10071</s>")
     {
@@ -60,6 +90,13 @@ public static class BotActions
         );
     }
 
+    /// <summary>
+    /// A method for processing an unidentified callback
+    /// </summary>
+    /// <param name="telegramBotClient"></param>
+    /// <param name="callbackQuery"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public static async Task<Message> SendUnknowCallbackQueryDataActionAsync(ITelegramBotClient telegramBotClient, CallbackQuery callbackQuery, CancellationToken cancellationToken)
     {
         await telegramBotClient.AnswerCallbackQueryAsync(callbackQuery.Id);
@@ -72,6 +109,13 @@ public static class BotActions
         );
     }
 
+    /// <summary>
+    /// The method for getting the original file
+    /// </summary>
+    /// <param name="telegramBotClient"></param>
+    /// <param name="callbackQuery"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public static async Task<Message> SendOriginalFile(ITelegramBotClient telegramBotClient, CallbackQuery callbackQuery, CancellationToken cancellationToken)
     {
         if (callbackQuery.Message == null) { return await SendUnknowCallbackQueryDataActionAsync(telegramBotClient, callbackQuery, cancellationToken); }
@@ -105,6 +149,13 @@ public static class BotActions
          "<s>&#10071</s><b>Failed</b> to download the original file. <s>&#10071</s> ");
     }
 
+    /// <summary>
+    /// The method for sending the bot operation menu
+    /// </summary>
+    /// <param name="telegramBotClient"></param>
+    /// <param name="message"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public static async Task<Message> FileMenuAction(ITelegramBotClient telegramBotClient, Message message, CancellationToken cancellationToken)
     {
         InlineKeyboardMarkup inlineKeyboard = new InlineKeyboardMarkup(new List<InlineKeyboardButton[]>()
@@ -133,6 +184,14 @@ public static class BotActions
         );
     }
 
+    /// <summary>
+    /// A method for sending a field selection menu for an action
+    /// </summary>
+    /// <param name="telegramBotClient"></param>
+    /// <param name="callbackQuery"></param>
+    /// <param name="cancellationToken"></param>
+    /// <param name="isSorting"></param>
+    /// <returns></returns>
     public static async Task<Message> FieldDataMenu(ITelegramBotClient telegramBotClient, CallbackQuery callbackQuery, CancellationToken cancellationToken, bool isSorting)
     {   
         InlineKeyboardMarkup inlineKeyboard = isSorting ? SortHelper.CreateSortingMarkup() : FilterHelper.CreateFilteringMarkup();
@@ -150,6 +209,13 @@ public static class BotActions
         );
     }
 
+    /// <summary>
+    /// A method for displaying unique filtering fields
+    /// </summary>
+    /// <param name="telegramBotClient"></param>
+    /// <param name="callbackQuery"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public static async Task<Message> FilterFieldValuesAction(ITelegramBotClient telegramBotClient, CallbackQuery callbackQuery, CancellationToken cancellationToken)
     {
         if (callbackQuery.Message == null || callbackQuery.Data == null) { return await SendUnknowCallbackQueryDataActionAsync(telegramBotClient, callbackQuery, cancellationToken); }
@@ -212,6 +278,13 @@ public static class BotActions
         );
     }
 
+    /// <summary>
+    /// A method for filtering data
+    /// </summary>
+    /// <param name="telegramBotClient"></param>
+    /// <param name="message"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public static async Task<Message> FilterDataAction(ITelegramBotClient telegramBotClient, Message message, CancellationToken cancellationToken)
     {
         if (message.Text == null) {return await VariableErrorMessageAction(telegramBotClient, message, cancellationToken, "Choose the value from keyboard.");}
@@ -274,6 +347,13 @@ public static class BotActions
         return await FileMenuAction(telegramBotClient, message, cancellationToken);
     }
 
+    /// <summary>
+    /// A method for sorting data
+    /// </summary>
+    /// <param name="telegramBotClient"></param>
+    /// <param name="callbackQuery"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public static async Task<Message> SortDataAction(ITelegramBotClient telegramBotClient, CallbackQuery callbackQuery, CancellationToken cancellationToken)
     {
         if (callbackQuery.Message == null || callbackQuery.Data == null) { return await SendUnknowCallbackQueryDataActionAsync(telegramBotClient, callbackQuery, cancellationToken); }
@@ -330,6 +410,13 @@ public static class BotActions
         return await FileMenuAction(telegramBotClient, callbackQuery.Message, cancellationToken);
     }
 
+    /// <summary>
+    /// Method for displaying data
+    /// </summary>
+    /// <param name="telegramBotClient"></param>
+    /// <param name="callbackQuery"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public static async Task<Message> ShowDataAction(ITelegramBotClient telegramBotClient, CallbackQuery callbackQuery, CancellationToken cancellationToken)
     {
         if (callbackQuery.Message == null) { return await SendUnknowCallbackQueryDataActionAsync(telegramBotClient, callbackQuery, cancellationToken); }
@@ -379,6 +466,13 @@ public static class BotActions
         return await FileMenuAction(telegramBotClient, callbackQuery.Message, cancellationToken);
     }
 
+    /// <summary>
+    /// Method for downloading data in json format
+    /// </summary>
+    /// <param name="telegramBotClient"></param>
+    /// <param name="callbackQuery"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public static async Task<Message> DownloadJsonDataAction(ITelegramBotClient telegramBotClient, CallbackQuery callbackQuery, CancellationToken cancellationToken)
     {
         if (callbackQuery.Message == null) { return await SendUnknowCallbackQueryDataActionAsync(telegramBotClient, callbackQuery, cancellationToken); }
@@ -420,6 +514,13 @@ public static class BotActions
         return await FileMenuAction(telegramBotClient, callbackQuery.Message, cancellationToken);
     }
 
+    /// <summary>
+    /// Method for downloading data in csv format
+    /// </summary>
+    /// <param name="telegramBotClient"></param>
+    /// <param name="callbackQuery"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public static async Task<Message> DownloadCSVDataAction(ITelegramBotClient telegramBotClient, CallbackQuery callbackQuery, CancellationToken cancellationToken)
     {
         if (callbackQuery.Message == null) { return await SendUnknowCallbackQueryDataActionAsync(telegramBotClient, callbackQuery, cancellationToken); }
@@ -484,6 +585,13 @@ public static class BotActions
         return await FileMenuAction(telegramBotClient, callbackQuery.Message, cancellationToken);
     }
 
+    /// <summary>
+    /// Method for displaying the data loading menu
+    /// </summary>
+    /// <param name="telegramBotClient"></param>
+    /// <param name="callbackQuery"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public static async Task<Message> DownloadMenuAction(ITelegramBotClient telegramBotClient, CallbackQuery callbackQuery, CancellationToken cancellationToken)
     {
         if (callbackQuery.Message == null) { return await SendUnknowCallbackQueryDataActionAsync(telegramBotClient, callbackQuery, cancellationToken); }
@@ -506,6 +614,13 @@ public static class BotActions
         );
     }
 
+    /// <summary>
+    /// a method for downloading data from the user
+    /// </summary>
+    /// <param name="telegramBotClient"></param>
+    /// <param name="message"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public static async Task<Message> LoadFileFromUserAction(ITelegramBotClient telegramBotClient, Message message, CancellationToken cancellationToken)
     {
         if (message.Document == null) { return await VariableErrorMessageAction(telegramBotClient, message, cancellationToken, "<b>Nothing</b> has been given as a document."); }

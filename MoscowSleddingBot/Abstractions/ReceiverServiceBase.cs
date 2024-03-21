@@ -5,6 +5,10 @@ using Telegram.Bot.Types.Enums;
 
 namespace MoscowSleddingBot.Abstractions;
 
+/// <summary>
+/// An abstract class that creates the basis for the request acceptance service - updates from telegram
+/// </summary>
+/// <typeparam name="TUpdateHandler">The generalized parameter is the interface of the request processing class</typeparam>
 public abstract class ReceiverServiceBase<TUpdateHandler> : IReceiverService where TUpdateHandler : IUpdateHandler
 {
     private readonly ITelegramBotClient _botClient;
@@ -18,6 +22,11 @@ public abstract class ReceiverServiceBase<TUpdateHandler> : IReceiverService whe
         _logger = logger;
     }
 
+    /// <summary>
+    /// The method that starts the process of accepting http requests by the bot client
+    /// </summary>
+    /// <param name="cts">Operation cancellation token</param>
+    /// <returns></returns>
     public async Task ReceiveAsync(CancellationToken cts)
     {
         ReceiverOptions receiverOptions = new ReceiverOptions

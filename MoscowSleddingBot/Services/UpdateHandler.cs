@@ -6,6 +6,9 @@ using Telegram.Bot.Types.Enums;
 using MoscowSleddingBot.Interfaces;
 
 namespace MoscowSleddingBot.Services;
+/// <summary>
+/// The bot request handler class
+/// </summary>
 public class UpdateHandler: IUpdateHandler
 {
     private readonly ILogger<UpdateHandler> _logger;
@@ -19,6 +22,13 @@ public class UpdateHandler: IUpdateHandler
         _callbackQueryService = callbackQueryService;
     }
 
+    /// <summary>
+    /// Request processing method
+    /// </summary>
+    /// <param name="telegramBotClient"></param>
+    /// <param name="update"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public async Task HandleUpdateAsync(ITelegramBotClient telegramBotClient, Update update, CancellationToken cancellationToken)
     {
         try
@@ -39,12 +49,26 @@ public class UpdateHandler: IUpdateHandler
         }
     }
 
+    /// <summary>
+    /// Method for the case of an unknown request type
+    /// </summary>
+    /// <param name="telegramBotClient"></param>
+    /// <param name="update"></param>
+    /// <param name="cToken"></param>
+    /// <returns></returns>
     private Task UnknownUpdateHandlerAsync(ITelegramBotClient telegramBotClient, Update update, CancellationToken cToken)
     {   
         _logger.LogInformation("Unknow update type occured: {updateType}", update.Type);
         return Task.CompletedTask;
     }
 
+    /// <summary>
+    /// A method for handling errors during request processing
+    /// </summary>
+    /// <param name="botClient"></param>
+    /// <param name="exception"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public async Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
     {
         string ErrorMessage = exception switch

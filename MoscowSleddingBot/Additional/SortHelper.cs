@@ -3,6 +3,9 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace MoscowSleddingBot.Additional;
 
+/// <summary>
+/// A static class for processing sorting-related processes
+/// </summary>
 public static class SortHelper
 {
     public static readonly List<string> lstWithSortingHeaders = new List<string>{
@@ -18,6 +21,10 @@ public static class SortHelper
         "Seats.A","Seats.D","Paid.A","Paid.D","PaidComments.A","PaidComments.D","DisabilityFriendly.A","DisabilityFriendly.D","ServicesWinter.A",
         "ServicesWinter.D","geoData.A","geoData.D","geodata_center.A","geodata_center.D","geoarea.A","geoarea.D"};
 
+    /// <summary>
+    /// a method for creating a keyboard from buttons with fields and sorting directions
+    /// </summary>
+    /// <returns>keyboard with text</returns>
     public static InlineKeyboardMarkup CreateSortingMarkup()
     {
         List<InlineKeyboardButton[]> lstWithButtonsRows = new List<InlineKeyboardButton[]>();
@@ -34,6 +41,13 @@ public static class SortHelper
         return new InlineKeyboardMarkup(lstWithButtonsRows);
     }
 
+    /// <summary>
+    /// A method for sorting data by the selected field
+    /// </summary>
+    /// <param name="lstWithData">a list with data</param>
+    /// <param name="fieldName">sorting field</param>
+    /// <param name="needToReverse">is reverse sorting necessary</param>
+    /// <returns>sorted data</returns>
     public static List<IceHillData> SortDataByField(List<IceHillData> lstWithData, string fieldName, bool needToReverse)
     {
         List<IceHillData> lstSortedData = fieldName switch

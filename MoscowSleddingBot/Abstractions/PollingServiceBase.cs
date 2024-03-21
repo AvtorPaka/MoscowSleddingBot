@@ -2,6 +2,10 @@ using MoscowSleddingBot.Interfaces;
 
 namespace MoscowSleddingBot.Abstractions;
 
+/// <summary>
+/// An abstract class that creates the basis for a request acceptance service
+/// </summary>
+/// <typeparam name="TReceiverService">The generalized parameter is the interface of the request acceptance service class</typeparam>
 public abstract class PollingServiceBase<TReceiverService>: BackgroundService where TReceiverService: IReceiverService
 {
     private readonly IServiceProvider _serviceProvider;
@@ -13,6 +17,11 @@ public abstract class PollingServiceBase<TReceiverService>: BackgroundService wh
         _logger = logger;
     }
 
+    /// <summary>
+    /// The method of starting the polling proces
+    /// </summary>
+    /// <param name="cancellationToken">Operation cancellation token</param>
+    /// <returns></returns>
     protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
         _logger.LogInformation("Starting polling service at {date}", DateTime.Now);
