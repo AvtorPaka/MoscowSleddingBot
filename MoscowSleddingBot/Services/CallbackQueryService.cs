@@ -19,7 +19,8 @@ public class CallbackQueryService: ICallbackQueryService
 
     public async Task BotOnCallbackQueryReceived(CallbackQuery callbackQuery, CancellationToken cancellationToken)
     {   
-        _logger.LogInformation("Received message type: {MessageType}", callbackQuery.Message!.Type);
+       _logger.LogInformation("---Received callback - Data: {mType} - MessageType : {dmType} - ID: {messageID} - ChatID : {chatID} - DateTime : {date}\n---UserData : {userData} ",
+        callbackQuery.Data, callbackQuery.Message!.Type, callbackQuery.Message!.Chat.Id, callbackQuery.Message.MessageId, DateTime.Now, callbackQuery.Message.From);;
 
         Task<Message> action = callbackQuery.Data switch
         {
@@ -36,6 +37,7 @@ public class CallbackQueryService: ICallbackQueryService
         };
 
         Message sentMessage = await action;
-        _logger.LogInformation("The message was sent with id {SentMessageId} on {DateTime}", sentMessage.MessageId, DateTime.Now);
+        _logger.LogInformation("Sent message - Type: {mType} - ID: {messageID} - ChatID : {chatID} - DateTime : {date}",
+         sentMessage.Type, sentMessage.MessageId, sentMessage.Chat.Id, DateTime.Now);
     }
 }

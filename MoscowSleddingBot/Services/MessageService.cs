@@ -20,7 +20,8 @@ public class MessageService : IMessageService
 
     public async Task BotOnMessageReceived(Message message, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Received message type: {MessageType}", message.Type);
+        _logger.LogInformation("---Received message - Type: {mType} - ID: {messageID} - ChatID : {chatID} - DateTime : {date}\n---UserData : {userData} ", message.Type,
+         message.MessageId, message.Chat.Id, DateTime.Now, message.From == null ? "NoData" : message.From.ToString());
 
         Task handelrMessage = message.Type switch
         {
@@ -35,7 +36,7 @@ public class MessageService : IMessageService
     {
         Message sentMessage = await BotActions.LoadFileFromUserAction(telegramBotClient, message, cancellationToken);
 
-        _logger.LogInformation("The message was sent with id {SentMessageId} on {DateTime}", sentMessage.MessageId, DateTime.Now);
+        _logger.LogInformation("Sent message - Type: {mType} - ID: {messageID} - ChatID : {chatID} - DateTime : {date} ", sentMessage.Type, sentMessage.MessageId, sentMessage.Chat.Id, DateTime.Now);
     }
 
     private async Task BotOnMessageTextHandler(ITelegramBotClient telegramBotClient, Message message, CancellationToken cancellationToken)
@@ -49,6 +50,6 @@ public class MessageService : IMessageService
 
         Message sentMessage = await action;
 
-        _logger.LogInformation("The message was sent with id {SentMessageId} on {DateTime}", sentMessage.MessageId, DateTime.Now);
+        _logger.LogInformation("Sent message - Type: {mType} - ID: {messageID} - ChatID : {chatID} - DateTime : {date} ", sentMessage.Type, sentMessage.MessageId, sentMessage.Chat.Id, DateTime.Now);
     }
 }

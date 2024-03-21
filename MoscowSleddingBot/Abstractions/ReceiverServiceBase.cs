@@ -27,7 +27,7 @@ public abstract class ReceiverServiceBase<TUpdateHandler> : IReceiverService whe
         };
 
         var me = await _botClient.GetMeAsync(cts);
-        _logger.LogInformation("Start receiving updates for {BotName}", me.Username ?? "MoscowSleddingBot");
+        _logger.LogInformation("Start receiving updates for {BotName} at {date}", me.Username ?? "MoscowSleddingBot", DateTime.Now);
 
         await _botClient.ReceiveAsync(
             updateHandler: _updateHandler,

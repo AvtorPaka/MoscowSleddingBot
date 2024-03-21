@@ -1,6 +1,8 @@
 using Telegram.Bot;
 using MoscowSleddingBot.Services;
 using MoscowSleddingBot.Interfaces;
+using MoscowSleddingBot.Log;
+using MoscowSleddingBot.Additional;
 
 var builder = Host.CreateDefaultBuilder(args);
 
@@ -12,7 +14,7 @@ builder.ConfigureAppConfiguration((context, config) =>
 
 builder.ConfigureServices((context, services) =>
 {   
-    string token = context.Configuration["MoscowSleddingBotToken"] ?? throw new Exception("Bot token wasnt found.");
+    string token = context.Configuration["MoscowSleddingBotToken"] ?? throw new Exception("Bot token is missing.");
     services.AddHttpClient("TelegramBotClient").AddTypedClient<ITelegramBotClient>(_ =>
     {
         return new TelegramBotClient(new TelegramBotClientOptions(token));
@@ -24,6 +26,9 @@ builder.ConfigureServices((context, services) =>
     services.AddScoped<ReceiverService>();
     services.AddHostedService<PollingService>();
 });
+
+string dirToLogData = DirectoryHelper.GetDirectoryFromEnvironment("PathToLoggData");
+builder.ConfigureLogging(loggingBuilder => {loggingBuilder.AddProvider(new CustomLoggingProvider(dirToLogData));});
 
 using IHost host = builder.Build();
 
