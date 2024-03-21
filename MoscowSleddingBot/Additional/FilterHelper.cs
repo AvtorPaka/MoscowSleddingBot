@@ -11,7 +11,7 @@ public static class FilterHelper
         "HelpPhoneExtension","WorkingHoursWinter","ClarificationOfWorkingHoursWinter","HasEquipmentRental","EquipmentRentalComments",
         "HasTechService","TechServiceComments","HasDressingRoom","HasEatery","HasToilet","HasWifi","HasCashMachine","HasFirstAidPost",
         "HasMusic","UsagePeriodWinter","DimensionsWinter","Lighting","SurfaceTypeWinter","Seats","Paid","PaidComments","DisabilityFriendly",
-        "ServicesWinter","geoData","geodata_center","geoarea"};
+        "ServicesWinter","geoData","geodata_center","geoarea","AdmArea and HasWifi"};
 
     public static InlineKeyboardMarkup CreateFilteringMarkup()
     {
@@ -108,6 +108,7 @@ public static class FilterHelper
             "geoData" => lstWithData.Select(n => n.GeoData ?? "").Distinct().ToList(),
             "geodata_center" => lstWithData.Select(n => n.GeoDataCenter ?? "").Distinct().ToList(),
             "geoarea" => lstWithData.Select(n => n.GeoArea ?? "").Distinct().ToList(),
+            "AdmArea and HasWifi" => lstWithData.Select(n => $"{n.AdmArea},{n.HasWifi}").Distinct().ToList(),
             _ => lstWithData.Select(x => x.GlobalId.ToString()).Distinct().ToList(),
         };
 
@@ -159,6 +160,7 @@ public static class FilterHelper
             "geoData" => lstWithData.Where(n => (n.GeoData ?? "") == filterParam).ToList(),
             "geodata_center" => lstWithData.Where(n => (n.GeoDataCenter ?? "") == filterParam).ToList(),
             "geoarea" => lstWithData.Where(n => (n.GeoArea ?? "") == filterParam).ToList(),
+            "AdmArea and HasWifi"  => lstWithData.Where(n => ((n.AdmArea ?? "") == filterParam.Split(',')[0]) && ((n.HasWifi ?? "") == filterParam.Split(',')[^1])).ToList(),
             _ => lstWithData,
         };
 
