@@ -3,6 +3,7 @@ using MoscowSleddingBot.Interfaces;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using MoscowSleddingBot.Additional;
 
 namespace MoscowSleddingBot.Services;
 
@@ -42,7 +43,8 @@ public class MessageService : IMessageService
         Task<Message> action = message.Text switch
         {
             "/start" => BotActions.SendStartText(telegramBotClient, message, cancellationToken),
-            _ => BotActions.SendUnknowMessageTextActionAsync(telegramBotClient, message, cancellationToken)
+            _ => System.IO.File.Exists(DirectoryHelper.GetDirectoryFromEnvironment("PathToLoadedData", $"{message.Chat.Id}_{message.From!.Username}_TmpChoise.txt")) ? 
+            BotActions.FilterDataAction(telegramBotClient, message, cancellationToken) : BotActions.SendUnknowMessageTextActionAsync(telegramBotClient, message, cancellationToken)
         };
 
         Message sentMessage = await action;

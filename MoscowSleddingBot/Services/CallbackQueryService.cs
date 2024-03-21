@@ -31,6 +31,7 @@ public class CallbackQueryService: ICallbackQueryService
             "/sortMenu" => BotActions.FieldDataMenu(_telegramBotClient, callbackQuery, cancellationToken, true),
             string curData when SortHelper.lstWithSortingHeaders.Contains(curData) => BotActions.SortDataAction(_telegramBotClient, callbackQuery, cancellationToken),
             "/filterMenu" => BotActions.FieldDataMenu(_telegramBotClient, callbackQuery, cancellationToken, false),
+            string curData when FilterHelper.lstWithFilterHeaders.Contains(curData) => BotActions.FilterFieldValuesAction(_telegramBotClient, callbackQuery, cancellationToken),
             _ => BotActions.SendUnknowCallbackQueryDataActionAsync(_telegramBotClient, callbackQuery, cancellationToken)
         };
 

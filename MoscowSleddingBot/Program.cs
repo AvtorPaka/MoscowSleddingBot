@@ -10,15 +10,8 @@ builder.ConfigureAppConfiguration((context, config) =>
     config.AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true);
 });
 
-// builder.ConfigureLogging(loggingBuilder =>
-// {
-//     var loggerPath = PathGetter.Get("var");
-//     loggingBuilder.AddProvider(new FileLoggerProvider(loggerPath));
-// });
-
 builder.ConfigureServices((context, services) =>
 {   
-    // string token = Environment.GetEnvironmentVariable("MoscowSleddingBotToken")!;
     string token = context.Configuration["MoscowSleddingBotToken"] ?? throw new Exception("Bot token wasnt found.");
     services.AddHttpClient("TelegramBotClient").AddTypedClient<ITelegramBotClient>(_ =>
     {
@@ -32,6 +25,6 @@ builder.ConfigureServices((context, services) =>
     services.AddHostedService<PollingService>();
 });
 
-IHost host = builder.Build();
+using IHost host = builder.Build();
 
 await host.RunAsync();

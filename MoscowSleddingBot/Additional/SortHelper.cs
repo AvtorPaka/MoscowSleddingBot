@@ -64,7 +64,7 @@ public static class SortHelper
             "HasMusic" => lstWithData.OrderBy(n => n.HasMusic ?? "").ToList(),
 
             "UsagePeriodWinter" => lstWithData.OrderBy(n => n.UsagePeriodWinter == null ? 0 : ((int.TryParse(n.UsagePeriodWinter.Split('-')[0].Split('.')[0], out int days) ? days : 0)
-             + (int.TryParse(n.UsagePeriodWinter.Split('-')[0].Split('.')[^1], out int months) ? months * 32 : 0))).ToList(), //Change it
+             + (int.TryParse(n.UsagePeriodWinter.Split('-')[0].Split('.')[^1], out int months) ? months * 32 : 0))).ToList(),
 
             "DimensionsWinter" => lstWithData.OrderBy(n => n.DimensionsWinter ?? "").ToList(),
             "Lighting" => lstWithData.OrderBy(n => n.Lighting ?? "").ToList(),
