@@ -30,7 +30,7 @@ public class UpdateHandler: IUpdateHandler
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public async Task HandleUpdateAsync(ITelegramBotClient telegramBotClient, Update update, CancellationToken cancellationToken)
-    {
+    {   
         try
         {
             Task handler = update.Type switch
@@ -45,7 +45,7 @@ public class UpdateHandler: IUpdateHandler
         }
         catch (Exception ex)
         {
-            _logger.LogInformation("{ExceptionMessage}\nException occured while handling {updateType}" ,ex.Message, update.Type);
+            _logger.LogInformation(">>>{ExceptionMessage}\n>>>Exception occured while handling {updateType}" ,ex.Message, update.Type);
         }
     }
 
@@ -58,7 +58,7 @@ public class UpdateHandler: IUpdateHandler
     /// <returns></returns>
     private Task UnknownUpdateHandlerAsync(ITelegramBotClient telegramBotClient, Update update, CancellationToken cToken)
     {   
-        _logger.LogInformation("Unknow update type occured: {updateType}", update.Type);
+        _logger.LogInformation(">>>Unknow update type occured: {updateType}", update.Type);
         return Task.CompletedTask;
     }
 
@@ -78,7 +78,7 @@ public class UpdateHandler: IUpdateHandler
             _ => exception.ToString()
         };
 
-        _logger.LogInformation("Handled error {ErrorMessage}", ErrorMessage);
+        _logger.LogInformation(">>>Handled error {ErrorMessage}", ErrorMessage);
 
         if (exception is RequestException) {await Task.Delay(TimeSpan.FromSeconds(2), cancellationToken);}
     }

@@ -1,7 +1,7 @@
 using Telegram.Bot;
 using MoscowSleddingBot.Services;
 using MoscowSleddingBot.Interfaces;
-using MoscowSleddingBot.Log;
+using MoscowSleddingBot.Logging;
 using MoscowSleddingBot.Additional;
 
 // Creating an IHostBuilder object to build or knot

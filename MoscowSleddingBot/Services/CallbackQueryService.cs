@@ -28,8 +28,8 @@ public class CallbackQueryService: ICallbackQueryService
     /// <returns></returns>
     public async Task BotOnCallbackQueryReceived(CallbackQuery callbackQuery, CancellationToken cancellationToken)
     {   
-       _logger.LogInformation("---Received callback - Data: {mType} - MessageType : {dmType} - ID: {messageID} - ChatID : {chatID} - DateTime : {date}\n---UserData : {userData} ",
-        callbackQuery.Data, callbackQuery.Message!.Type, callbackQuery.Message!.Chat.Id, callbackQuery.Message.MessageId, DateTime.Now, callbackQuery.Message.From);;
+       _logger.LogInformation(">Received callback => Data: {mType} | MessageType : {dmType} | ID : {messageID} | ChatID : {chatID} | DateTime : {date} | UserData : {userData}",
+        callbackQuery.Data, callbackQuery.Message!.Type, callbackQuery.Message!.Chat.Id, callbackQuery.Message.MessageId, DateTime.Now, callbackQuery.From);;
 
         Task<Message> action = callbackQuery.Data switch
         {
@@ -42,11 +42,11 @@ public class CallbackQueryService: ICallbackQueryService
             string curData when SortHelper.lstWithSortingHeaders.Contains(curData) => BotActions.SortDataAction(_telegramBotClient, callbackQuery, cancellationToken),
             "/filterMenu" => BotActions.FieldDataMenu(_telegramBotClient, callbackQuery, cancellationToken, false),
             string curData when FilterHelper.lstWithFilterHeaders.Contains(curData) => BotActions.FilterFieldValuesAction(_telegramBotClient, callbackQuery, cancellationToken),
-            _ => BotActions.SendUnknowCallbackQueryDataActionAsync(_telegramBotClient, callbackQuery, cancellationToken)
+            _ => BotActions.VariableErrorCallbackAction(_telegramBotClient, callbackQuery, cancellationToken, "<b>Sorry</b>, I have nothing tell you about this.")
         };
 
         Message sentMessage = await action;
-        _logger.LogInformation("Sent message - Type: {mType} - ID: {messageID} - ChatID : {chatID} - DateTime : {date}",
+        _logger.LogInformation(">>Sent message => Type: {mType} | ID: {messageID} | ChatID : {chatID} | DateTime : {date}",
          sentMessage.Type, sentMessage.MessageId, sentMessage.Chat.Id, DateTime.Now);
     }
 }

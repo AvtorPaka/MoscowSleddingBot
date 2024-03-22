@@ -29,14 +29,14 @@ public class MessageService : IMessageService
     /// <returns></returns>
     public async Task BotOnMessageReceived(Message message, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("---Received message - Type: {mType} - ID: {messageID} - ChatID : {chatID} - DateTime : {date}\n---UserData : {userData} ", message.Type,
+        _logger.LogInformation(">Received message => Text : {messageText} | Type : {mType} | ID: {messageID} | ChatID : {chatID} | DateTime : {date} | UserData : {userData} ", message.Text, message.Type,
          message.MessageId, message.Chat.Id, DateTime.Now, message.From == null ? "NoData" : message.From.ToString());
 
         Task handelrMessage = message.Type switch
         {
             MessageType.Text => BotOnMessageTextHandler(_telegramBotClient, message, cancellationToken),
             MessageType.Document => BotOnMessageDocumentHandler(_telegramBotClient, message, cancellationToken),
-            _ => BotActions.SendUnknowMessageTextActionAsync(_telegramBotClient, message, cancellationToken)
+            _ => BotActions.VariableErrorMessageAction(_telegramBotClient, message, cancellationToken, "<b>Sorry</b>, I have nothing tell you about this.")
         };
 
         await handelrMessage;
@@ -53,7 +53,8 @@ public class MessageService : IMessageService
     {
         Message sentMessage = await BotActions.LoadFileFromUserAction(telegramBotClient, message, cancellationToken);
 
-        _logger.LogInformation("Sent message - Type: {mType} - ID: {messageID} - ChatID : {chatID} - DateTime : {date} ", sentMessage.Type, sentMessage.MessageId, sentMessage.Chat.Id, DateTime.Now);
+        _logger.LogInformation(">>Sent message => Type: {mType} | ID: {messageID} | ChatID : {chatID} | DateTime : {date}",
+         sentMessage.Type, sentMessage.MessageId, sentMessage.Chat.Id, DateTime.Now);
     }
 
     /// <summary>
@@ -69,11 +70,12 @@ public class MessageService : IMessageService
         {
             "/start" => BotActions.SendStartText(telegramBotClient, message, cancellationToken),
             _ => System.IO.File.Exists(DirectoryHelper.GetDirectoryFromEnvironment("PathToLoadedData", $"{message.Chat.Id}_{message.From!.Username}_TmpChoise.txt")) ? 
-            BotActions.FilterDataAction(telegramBotClient, message, cancellationToken) : BotActions.SendUnknowMessageTextActionAsync(telegramBotClient, message, cancellationToken)
+            BotActions.FilterDataAction(telegramBotClient, message, cancellationToken) : BotActions.VariableErrorMessageAction(telegramBotClient, message, cancellationToken, "<b>Sorry</b>, I have nothing tell you about this.")
         };
 
         Message sentMessage = await action;
 
-        _logger.LogInformation("Sent message - Type: {mType} - ID: {messageID} - ChatID : {chatID} - DateTime : {date} ", sentMessage.Type, sentMessage.MessageId, sentMessage.Chat.Id, DateTime.Now);
+        _logger.LogInformation(">>Sent message => Type: {mType} | ID: {messageID} | ChatID : {chatID} | DateTime : {date}",
+         sentMessage.Type, sentMessage.MessageId, sentMessage.Chat.Id, DateTime.Now);
     }
 }
