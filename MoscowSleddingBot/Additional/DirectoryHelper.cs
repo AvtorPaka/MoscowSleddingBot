@@ -17,10 +17,15 @@ public static class DirectoryHelper
     /// <returns>The line with the formed directory</returns>
     public static string GetDirectoryFromEnvironment(string envirVariableName = "PathToLoadedData", string addToPath = "")
     {   
-        string? pathToSmth;
+        string? pathToSmth = envirVariableName switch
+        {
+            "PathToLoadedData" => "./LoadedData/",
+            "OriginalFilePath" => "./Assets/ice-hills.csv",
+            "PathToLoggData" => "./var/",
+            _ => "../"
+        };
 
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) { pathToSmth = Environment.GetEnvironmentVariable($"{envirVariableName}Win")!; }
-        else { pathToSmth = Environment.GetEnvironmentVariable($"{envirVariableName}UNIX")!;}
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) { pathToSmth.Replace('/', '\\'); }
 
         return Path.Combine(pathToSmth, addToPath);
     }

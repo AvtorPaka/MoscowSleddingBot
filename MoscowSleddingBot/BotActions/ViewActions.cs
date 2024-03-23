@@ -5,7 +5,6 @@ using Telegram.Bot.Types.ReplyMarkups;
 using MoscowSleddingBot.Additional;
 using System.Text;
 
-
 namespace MoscowSleddingBot.Actions;
 
 public static partial class BotActions

@@ -1,0 +1,7 @@
+services:
+  app:
+    build:
+      context: .
+      target: final
+      dockerfile: Moscow.Sledding.Telegram.Bot/Dockerfile
+
