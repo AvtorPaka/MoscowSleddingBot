@@ -50,7 +50,7 @@ public static partial class BotActions
     }
 
     /// <summary>
-    /// a method for downloading data from the user
+    /// A method for downloading data from the user
     /// </summary>
     /// <param name="telegramBotClient"></param>
     /// <param name="message"></param>

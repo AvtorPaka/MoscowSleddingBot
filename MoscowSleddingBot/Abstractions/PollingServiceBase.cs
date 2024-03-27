@@ -18,7 +18,7 @@ public abstract class PollingServiceBase<TReceiverService>: BackgroundService wh
     }
 
     /// <summary>
-    /// The method of starting the polling proces
+    /// The method of starting the polling service
     /// </summary>
     /// <param name="cancellationToken">Operation cancellation token</param>
     /// <returns></returns>

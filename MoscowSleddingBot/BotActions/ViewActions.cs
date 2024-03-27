@@ -10,7 +10,7 @@ namespace MoscowSleddingBot.Actions;
 public static partial class BotActions
 {
     /// <summary>
-    /// Method for displaying data
+    /// Method for displaying data in json format to the user
     /// </summary>
     /// <param name="telegramBotClient"></param>
     /// <param name="callbackQuery"></param>

@@ -22,7 +22,7 @@ public static class SortHelper
         "ServicesWinter.D","geoData.A","geoData.D","geodata_center.A","geodata_center.D","geoarea.A","geoarea.D"};
 
     /// <summary>
-    /// a method for creating a keyboard from buttons with fields and sorting directions
+    /// Method for creating a inline keyboard with fields and sorting directions
     /// </summary>
     /// <returns>keyboard with text</returns>
     public static InlineKeyboardMarkup CreateSortingMarkup()
@@ -42,7 +42,7 @@ public static class SortHelper
     }
 
     /// <summary>
-    /// A method for sorting data by the selected field
+    /// A method for sorting data by the selected field and direction
     /// </summary>
     /// <param name="lstWithData">a list with data</param>
     /// <param name="fieldName">sorting field</param>

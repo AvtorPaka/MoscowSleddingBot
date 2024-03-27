@@ -17,7 +17,7 @@ public static class FilterHelper
         "ServicesWinter","geoData","geodata_center","geoarea","AdmArea and HasWifi"};
 
     /// <summary>
-    /// a method for creating a keyboard from buttons with fields for filtering
+    /// Method for creating a inline keyboard with fields for filtering
     /// </summary>
     /// <returns>Keyboard with buttons</returns>
     public static InlineKeyboardMarkup CreateFilteringMarkup()
@@ -48,7 +48,7 @@ public static class FilterHelper
     }
 
     /// <summary>
-    /// a method for creating a keyboard under the input window from buttons- unique values by field
+    /// Method for creating a keyboard under the input window from buttons- unique values by field
     /// </summary>
     /// <param name="lstWithData">A list with data</param>
     /// <param name="fieldName">The field that the values are being searched for</param>

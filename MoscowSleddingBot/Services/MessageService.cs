@@ -8,7 +8,7 @@ using MoscowSleddingBot.Additional;
 namespace MoscowSleddingBot.Services;
 
 /// <summary>
-/// A class for processing text queries
+/// A class for processing text requests
 /// </summary>
 public class MessageService : IMessageService
 {

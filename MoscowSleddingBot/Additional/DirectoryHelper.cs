@@ -10,7 +10,7 @@ namespace MoscowSleddingBot.Additional;
 public static class DirectoryHelper
 {   
     /// <summary>
-    /// An auxiliary class for getting the directory to the data from the environment variables
+    /// An auxiliary class for getting the directory to the data
     /// </summary>
     /// <param name="envirVariableName">environment variable</param>
     /// <param name="addToPath">file name</param>

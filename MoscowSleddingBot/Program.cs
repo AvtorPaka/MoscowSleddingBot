@@ -11,7 +11,7 @@ var builder = Host.CreateDefaultBuilder(args);
 builder.ConfigureAppConfiguration((context, config) =>
 {
     IHostEnvironment envir = context.HostingEnvironment;
-    config.AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true);
+    config.AddJsonFile("appsettings.Secrets.json", optional: false, reloadOnChange: true);
 });
 
 //Setting up the configuration of the services
